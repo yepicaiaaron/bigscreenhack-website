@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>THE BIG SCREEN HACK — CANNES EDITION</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;800&display=swap');
@@ -373,7 +376,7 @@
                 // Interpolate position based on scroll
                 const x = s.startX + (s.targetX - s.startX) * progress;
                 const y = s.startY + (s.targetY - s.startY) * progress;
-                const z = s.startZ + (targetZ - s.startZ) * progress;
+                const z = s.startZ + (s.targetZ - s.startZ) * progress;
                 
                 // Rotate as they assemble
                 const rotY = s.startRotY + progress * 360;

@@ -1,887 +1,504 @@
 <!DOCTYPE html>
-<html lang="en" class="no-js">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BIG SCREEN HACK — CANNES EDITION</title>
+    <title>THE BIG SCREEN HACK — CANNES EDITION</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Grotesk:wght@300;500;700&family=Syne:wght@400;700;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;800&display=swap');
         
-        :root {
-            --void: #050505;
-            --acid: #CCFF00;
-            --blood: #FF0040;
-            --cyan: #00FFFF;
-            --bone: #F0F0F0;
-            --ash: #2A2A2A;
-            --smoke: #1A1A1A;
-            --font-display: 'Archivo Black', sans-serif;
-            --font-body: 'Space Grotesk', sans-serif;
-            --font-accent: 'Syne', sans-serif;
+        body, html { 
+            margin: 0; 
+            padding: 0; 
+            background: #0a0510; 
+            font-family: 'Montserrat', sans-serif; 
+            overflow-x: hidden; 
+            overscroll-behavior: none;
         }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            cursor: none !important;
-        }
-
-        html, body {
-            width: 100%;
-            background: var(--void);
-            color: var(--bone);
-            font-family: var(--font-body);
-            overflow-x: hidden;
-            -webkit-font-smoothing: antialiased;
-        }
-
-        body.loading {
-            overflow: hidden;
-        }
-
-        /* --- Custom Cursor --- */
-        .cursor-dot {
-            position: fixed;
-            top: 0; left: 0;
-            width: 8px; height: 8px;
-            background: var(--acid);
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-            pointer-events: none;
-            z-index: 10000;
-            mix-blend-mode: difference;
-        }
-        .cursor-outline {
-            position: fixed;
-            top: 0; left: 0;
-            width: 40px; height: 40px;
-            border: 1px solid var(--acid);
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-            pointer-events: none;
-            z-index: 9999;
-            transition: width 0.2s, height 0.2s, background 0.2s;
-            mix-blend-mode: difference;
-        }
-
-        /* --- Noise & WebGL Canvas --- */
-        #webgl-canvas {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100vw; height: 100vh;
-            z-index: 0;
-            pointer-events: none;
-            opacity: 0.6;
-        }
-        .noise-overlay {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100vw; height: 100vh;
-            pointer-events: none;
-            z-index: 9000;
-            opacity: 0.04;
-            background: url('data:image/svg+xml,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noiseFilter)"/%3E%3C/svg%3E');
-        }
-
-        /* --- Preloader --- */
-        .loader {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100vw; height: 100vh;
-            background: var(--void);
-            z-index: 9998;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-        }
-        .loader-text {
-            font-family: var(--font-display);
-            font-size: 10vw;
-            color: transparent;
-            -webkit-text-stroke: 1px var(--ash);
-            position: relative;
-        }
-        .loader-fill {
-            position: absolute;
-            top: 0; left: 0;
-            color: var(--acid);
-            -webkit-text-stroke: 0px;
-            clip-path: polygon(0 100%, 100% 100%, 100% 100%, 0 100%);
-            transition: clip-path 0.1s;
-        }
-        .loader-system {
-            font-family: var(--font-body);
-            color: var(--blood);
-            margin-top: 20px;
-            letter-spacing: 0.5em;
-            font-size: 0.8rem;
-            animation: blink 0.5s infinite;
-        }
-
-        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
-
-        /* --- Main Layout --- */
-        main {
-            position: relative;
-            z-index: 10;
-        }
-
-        section {
-            position: relative;
-            width: 100%;
-        }
-
-        /* --- Typography Utils --- */
-        .char { display: inline-block; }
-        .word { display: inline-block; overflow: hidden; vertical-align: bottom; }
         
-        .title-huge {
-            font-family: var(--font-display);
-            font-size: clamp(4rem, 15vw, 15rem);
-            line-height: 0.8;
-            text-transform: uppercase;
+        /* 3D Canvas Background */
+        #canvas-container { 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100vw; 
+            height: 100vh; 
+            z-index: 0; 
+            pointer-events: none;
         }
-        .title-large {
-            font-family: var(--font-display);
-            font-size: clamp(3rem, 8vw, 8rem);
-            line-height: 0.9;
-            text-transform: uppercase;
-        }
-        .text-lead {
-            font-family: var(--font-accent);
-            font-size: clamp(1.5rem, 3vw, 3rem);
-            line-height: 1.2;
-            font-weight: 700;
-        }
-        .text-body {
-            font-family: var(--font-body);
-            font-size: clamp(1rem, 1.5vw, 1.5rem);
-            line-height: 1.6;
-            color: #999;
+        
+        /* Sunset Sky Gradient */
+        .sunset-bg {
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100vw; 
+            height: 100vh; 
+            z-index: -1;
+            background: linear-gradient(180deg, #160a2c 0%, #461448 35%, #9b2d5a 65%, #e86a58 100%);
         }
 
-        /* --- S1: Hero --- */
-        .s-hero {
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
+        /* Content Layout */
+        main { 
+            position: relative; 
+            z-index: 10; 
         }
-        .hero-subtitle {
+        
+        .section { 
+            height: 120vh; /* Extra height for scrolling room */
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            text-align: center; 
+            padding: 0 5vw;
+        }
+
+        /* Typography */
+        .text-overlay { 
+            color: white; 
+            text-transform: uppercase; 
+            text-shadow: 0 0 30px rgba(0,0,0,0.8), 0 0 10px rgba(255,255,255,0.2); 
+            opacity: 0; /* Hidden initially for GSAP */
+            transform: translateY(50px);
+        }
+        
+        h1 { 
+            font-size: clamp(3rem, 6vw, 8rem); 
+            font-weight: 800; 
+            margin: 0; 
+            letter-spacing: 0.1em;
+            line-height: 1.1;
+        }
+        
+        h2 { 
+            font-size: clamp(2rem, 4vw, 5rem); 
+            font-weight: 300; 
+            margin: 0; 
+            letter-spacing: 0.15em;
+        }
+        
+        p { 
+            font-size: clamp(1rem, 1.2vw, 1.5rem); 
+            font-weight: 500; 
+            max-width: 600px; 
+            margin: 20px auto; 
+            line-height: 1.6; 
+            letter-spacing: 0.05em;
+            color: #ffdddd;
+        }
+
+        /* Glassmorphism Form Panel */
+        .glass-panel { 
+            background: rgba(20, 0, 10, 0.4); 
+            backdrop-filter: blur(20px); 
+            -webkit-backdrop-filter: blur(20px); 
+            border: 1px solid rgba(255,255,255,0.2); 
+            padding: 60px 40px; 
+            border-radius: 24px; 
+            box-shadow: 0 30px 60px rgba(0,0,0,0.5), inset 0 0 20px rgba(255,255,255,0.05);
+            width: 100%;
+            max-width: 500px;
+        }
+
+        /* Form Elements */
+        input { 
+            background: transparent; 
+            border: none; 
+            border-bottom: 2px solid rgba(255,255,255,0.3); 
+            color: white; 
+            padding: 15px 10px; 
+            font-family: inherit; 
+            font-size: 1rem; 
+            width: 100%; 
+            margin-bottom: 30px; 
+            transition: 0.3s;
+        }
+        
+        input:focus { 
+            outline: none; 
+            border-bottom: 2px solid #e86a58; 
+            background: rgba(255,255,255,0.05);
+        }
+        
+        input::placeholder {
+            color: rgba(255,255,255,0.5);
+            letter-spacing: 0.1em;
+        }
+
+        button { 
+            background: white; 
+            color: #160a2c; 
+            border: none; 
+            padding: 20px 40px; 
+            font-family: inherit; 
             font-size: 1rem;
-            letter-spacing: 0.3em;
-            color: var(--cyan);
-            margin-bottom: 2rem;
-            text-transform: uppercase;
-        }
-        .hero-title-wrapper {
-            position: relative;
-            mix-blend-mode: screen;
-        }
-        .hero-title-layer {
-            position: absolute;
-            top: 0; left: 0;
+            font-weight: 800; 
+            letter-spacing: 0.15em; 
+            cursor: pointer; 
+            border-radius: 50px; 
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); 
             width: 100%;
+            margin-top: 10px;
         }
-        .layer-1 { color: var(--blood); transform: translate(-4px, -4px); opacity: 0.8; }
-        .layer-2 { color: var(--cyan); transform: translate(4px, 4px); opacity: 0.8; }
-        .layer-main { color: var(--bone); position: relative; z-index: 2; }
         
+        button:hover { 
+            background: #e86a58; 
+            color: white; 
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(232, 106, 88, 0.4);
+        }
+
         .scroll-indicator {
             position: absolute;
-            bottom: 40px;
+            bottom: 5vh;
             left: 50%;
             transform: translateX(-50%);
-            font-size: 0.8rem;
-            letter-spacing: 0.2em;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 10px;
+            gap: 15px;
+            opacity: 0.7;
+            animation: bounce 2s infinite;
         }
+
+        .scroll-indicator span {
+            font-size: 0.8rem;
+            letter-spacing: 0.3em;
+            color: white;
+        }
+
         .scroll-line {
-            width: 1px;
+            width: 2px;
             height: 40px;
-            background: linear-gradient(to bottom, var(--acid), transparent);
-            animation: scrollLine 2s infinite;
-            transform-origin: top;
-        }
-        @keyframes scrollLine { 0% { transform: scaleY(0); } 50% { transform: scaleY(1); } 100% { transform: scaleY(0); transform-origin: bottom; } }
-
-        /* --- S2: The Problem (Noise) --- */
-        .s-problem {
-            padding: 15vmax 5vw;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-        }
-        .problem-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10vw;
-            align-items: center;
-        }
-        .stat-block {
-            margin-top: 4rem;
-            border-top: 1px solid var(--ash);
-            padding-top: 2rem;
-        }
-        .stat-num {
-            color: var(--blood);
-            font-family: var(--font-display);
-            font-size: 5rem;
-            line-height: 1;
+            background: linear-gradient(to bottom, white, transparent);
         }
 
-        /* --- S3: Horizontal Scroll (The Engine) --- */
-        .s-horizontal {
-            height: 100vh;
-            width: 100%;
-            overflow: hidden;
-            position: relative;
-            background: var(--smoke);
-        }
-        .horizontal-container {
-            display: flex;
-            width: 400vw;
-            height: 100%;
-        }
-        .h-panel {
-            width: 100vw;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 5vw;
-            position: relative;
-        }
-        .h-panel::after {
-            content: '';
-            position: absolute;
-            right: 0; top: 10%; bottom: 10%;
-            width: 1px;
-            background: rgba(255,255,255,0.1);
-        }
-        .panel-content {
-            max-width: 800px;
-            text-align: center;
-        }
-        .panel-icon {
-            font-size: 4rem;
-            color: var(--acid);
-            margin-bottom: 2rem;
-        }
-
-        /* --- S4: Marquee & Cannes --- */
-        .s-cannes {
-            padding: 10vmax 0;
-            background: var(--void);
-            position: relative;
-        }
-        .marquee-wrapper {
-            width: 100%;
-            overflow: hidden;
-            white-space: nowrap;
-            display: flex;
-            border-top: 1px solid var(--ash);
-            border-bottom: 1px solid var(--ash);
-            padding: 2rem 0;
-            background: var(--acid);
-            color: var(--void);
-            transform: rotate(-2deg) scale(1.05);
-            margin: 10vh 0;
-        }
-        .marquee-content {
-            display: flex;
-            animation: marquee 20s linear infinite;
-        }
-        .marquee-item {
-            font-family: var(--font-display);
-            font-size: 4rem;
-            padding: 0 2rem;
-            text-transform: uppercase;
-        }
-        @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
-        
-        .cannes-content {
-            padding: 0 5vw;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 5vw;
-            align-items: center;
-            margin-top: 10vh;
-        }
-        .palm-3d {
-            width: 100%;
-            aspect-ratio: 1;
-            border: 1px solid var(--ash);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            transform-style: preserve-3d;
-        }
-        .palm-ring {
-            position: absolute;
-            width: 100%; height: 100%;
-            border: 1px solid var(--cyan);
-            border-radius: 50%;
-            animation: rotateRing 10s linear infinite;
-        }
-        .palm-ring:nth-child(2) { border-color: var(--blood); animation-duration: 15s; animation-direction: reverse; transform: rotateX(45deg); }
-        .palm-ring:nth-child(3) { border-color: var(--acid); animation-duration: 20s; transform: rotateY(45deg); }
-        @keyframes rotateRing { 100% { transform: rotateZ(360deg) rotateX(45deg) rotateY(45deg); } }
-
-        /* --- S5: Form/Gate --- */
-        .s-gate {
-            min-height: 100vh;
-            padding: 10vmax 5vw;
-            background: #000;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-        .form-container {
-            width: 100%;
-            max-width: 800px;
-            margin-top: 4rem;
-        }
-        .input-group {
-            position: relative;
-            margin-bottom: 3rem;
-            overflow: hidden;
-        }
-        .input-group input {
-            width: 100%;
-            background: transparent;
-            border: none;
-            border-bottom: 2px solid var(--ash);
-            padding: 1rem 0;
-            font-size: 1.5rem;
-            color: var(--bone);
-            font-family: var(--font-accent);
-            transition: border-color 0.3s;
-        }
-        .input-group input:focus {
-            outline: none;
-            border-color: var(--acid);
-        }
-        .input-group label {
-            position: absolute;
-            left: 0; top: 1rem;
-            color: #666;
-            font-family: var(--font-body);
-            font-size: 1.2rem;
-            transition: 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-            pointer-events: none;
-        }
-        .input-group input:focus ~ label,
-        .input-group input:valid ~ label {
-            transform: translateY(-1.5rem);
-            font-size: 0.8rem;
-            color: var(--acid);
-        }
-        
-        .magnetic-btn {
-            background: transparent;
-            border: 1px solid var(--bone);
-            color: var(--bone);
-            padding: 1.5rem 4rem;
-            font-family: var(--font-display);
-            font-size: 1.5rem;
-            border-radius: 50px;
-            cursor: none;
-            position: relative;
-            overflow: hidden;
-            transition: color 0.3s, border-color 0.3s;
-            display: inline-block;
-        }
-        .magnetic-btn::before {
-            content: '';
-            position: absolute;
-            top: 100%; left: 0;
-            width: 100%; height: 100%;
-            background: var(--acid);
-            border-radius: 50%;
-            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-            z-index: -1;
-        }
-        .magnetic-btn:hover {
-            color: var(--void);
-            border-color: var(--acid);
-        }
-        .magnetic-btn:hover::before {
-            transform: translateY(-50%) scale(2);
-        }
-
-        @media (max-width: 768px) {
-            .problem-grid, .cannes-content { grid-template-columns: 1fr; }
-            .h-panel { padding: 15vw; }
-            .cursor-dot, .cursor-outline { display: none; }
-            * { cursor: auto !important; }
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0) translateX(-50%); }
+            40% { transform: translateY(-10px) translateX(-50%); }
+            60% { transform: translateY(-5px) translateX(-50%); }
         }
     </style>
 </head>
-<body class="loading">
-
-    <div class="cursor-dot"></div>
-    <div class="cursor-outline"></div>
-    
-    <div class="noise-overlay"></div>
-    <canvas id="webgl-canvas"></canvas>
-
-    <div class="loader">
-        <div class="loader-text" data-text="000">000</div>
-        <div class="loader-fill" data-text="000">000</div>
-        <div class="loader-system">SYSTEM_INITIALIZING</div>
-    </div>
+<body>
+    <!-- Background layers -->
+    <div class="sunset-bg"></div>
+    <div id="canvas-container"></div>
 
     <main>
-        <!-- HERO -->
-        <section class="s-hero" id="hero">
-            <div class="hero-subtitle" data-split>VIDEOSTACK.AI PRESENTS</div>
-            <div class="hero-title-wrapper">
-                <div class="hero-title-layer layer-1 title-huge">THE BIG<br>SCREEN<br>HACK</div>
-                <div class="hero-title-layer layer-2 title-huge">THE BIG<br>SCREEN<br>HACK</div>
-                <h1 class="hero-title-layer layer-main title-huge" data-split>THE BIG<br>SCREEN<br>HACK</h1>
-            </div>
-            <div class="scroll-indicator">
-                <span>DESCEND</span>
-                <div class="scroll-line"></div>
-            </div>
-        </section>
-
-        <!-- THE PROBLEM -->
-        <section class="s-problem">
-            <div class="problem-grid">
-                <div>
-                    <h2 class="title-large" style="color: var(--acid);" data-split>THE NOISE</h2>
-                    <p class="text-lead" style="margin-top: 2rem;" data-split>AI has democratised production, but standardized creativity.</p>
-                </div>
-                <div>
-                    <p class="text-body" data-split>Brands are drowning in a flood of high-fidelity, low-impact noise. The tools gave everyone a voice, but stripped away the soul. We are fixing the engine.</p>
-                    <div class="stat-block">
-                        <div class="stat-num">26%</div>
-                        <p class="text-body">Consumer trust in AI content plummeted from 60% in just two years.</p>
-                    </div>
+        <!-- Section 1: Hero -->
+        <section class="section" id="s1">
+            <div class="text-overlay">
+                <h1>THE BIG SCREEN<br>HACK</h1>
+                <div class="scroll-indicator">
+                    <span>DESCEND</span>
+                    <div class="scroll-line"></div>
                 </div>
             </div>
         </section>
 
-        <!-- HORIZONTAL SCROLL (THE ENGINE) -->
-        <section class="s-horizontal" id="horizontal">
-            <div class="horizontal-container">
-                <div class="h-panel">
-                    <div class="panel-content">
-                        <div class="panel-icon">01</div>
-                        <h2 class="title-large" data-split>CULTURE &<br>CAMPAIGN<br>COLLIDE</h2>
-                        <p class="text-body" style="margin-top: 2rem;">The wild, wacky and sometimes counter-culture create the best ads. Story always wins... but AI isn't very good at this.</p>
-                    </div>
-                </div>
-                <div class="h-panel">
-                    <div class="panel-content">
-                        <div class="panel-icon">02</div>
-                        <h2 class="title-large" data-split>ORIGINAL<br>STORYTELLING</h2>
-                        <p class="text-body" style="margin-top: 2rem;">Videostack.ai is the world's first original storytelling production engine. We remove the pain of prompting.</p>
-                    </div>
-                </div>
-                <div class="h-panel">
-                    <div class="panel-content">
-                        <div class="panel-icon">03</div>
-                        <h2 class="title-large" style="color: var(--cyan);" data-split>24 HOURS<br>TO GLORY</h2>
-                        <p class="text-body" style="margin-top: 2rem;">Hack your way to the big screen in 24 hours. A creative sprint where tech serves the narrative, not the other way around.</p>
-                    </div>
-                </div>
-                <div class="h-panel">
-                    <div class="panel-content">
-                        <div class="panel-icon">04</div>
-                        <h2 class="title-large" style="color: var(--blood);" data-split>OUTLIER<br>IDEAS</h2>
-                        <p class="text-body" style="margin-top: 2rem;">Break out of the flatline. Generate work that impacts culture.</p>
-                    </div>
-                </div>
+        <!-- Section 2: VideoStack -->
+        <section class="section" id="s2">
+            <div class="text-overlay">
+                <h2>POWERED BY<br>VIDEOSTACK</h2>
+                <p>The world's first original storytelling production engine. We remove the pain of prompting.</p>
             </div>
         </section>
 
-        <!-- CANNES -->
-        <section class="s-cannes">
-            <div class="marquee-wrapper">
-                <div class="marquee-content">
-                    <div class="marquee-item">THE ULTIMATE STAGE — CANNES FILM FESTIVAL 2026 — </div>
-                    <div class="marquee-item">THE ULTIMATE STAGE — CANNES FILM FESTIVAL 2026 — </div>
-                    <div class="marquee-item">THE ULTIMATE STAGE — CANNES FILM FESTIVAL 2026 — </div>
-                </div>
-            </div>
-            
-            <div class="cannes-content">
-                <div class="palm-3d" data-magnetic>
-                    <div class="palm-ring"></div>
-                    <div class="palm-ring"></div>
-                    <div class="palm-ring"></div>
-                    <h3 class="text-lead" style="position: absolute; text-align: center;">WORLD<br>PREMIERE</h3>
-                </div>
-                <div>
-                    <h2 class="title-large" data-split>THE<br>REWARD</h2>
-                    <p class="text-body" style="margin-top: 2rem;">Winners of the Big Screen Hack see their outlier ideas premiered at the Cannes Film Festival. No more scrolling past. Total cinematic immersion.</p>
-                </div>
+        <!-- Section 3: BFI -->
+        <section class="section" id="s3">
+            <div class="text-overlay">
+                <h2>FROM THE BFI<br>PREMIERE</h2>
+                <p>Where outlier ideas shattered the noise and claimed the big screen.</p>
             </div>
         </section>
 
-        <!-- GATE / FORM -->
-        <section class="s-gate">
-            <h2 class="title-large" style="text-align: center;" data-split>SYSTEM_OVERRIDE</h2>
-            <div class="form-container">
-                <form action="#" method="POST">
-                    <div class="input-group">
-                        <input type="text" id="name" required>
-                        <label>IDENTIFICATION (NAME)</label>
-                    </div>
-                    <div class="input-group">
-                        <input type="email" id="email" required>
-                        <label>COMMS_LINK (EMAIL)</label>
-                    </div>
-                    <div style="text-align: center; margin-top: 4rem;">
-                        <button type="submit" class="magnetic-btn" data-magnetic>INITIATE HACK</button>
-                    </div>
+        <!-- Section 4: Cannes -->
+        <section class="section" id="s4">
+            <div class="text-overlay">
+                <h1 style="color: #ffddaa;">TO THE CANNES<br>EDITION</h1>
+                <p>Hack your way to the ultimate stage in 24 hours. No scrolling past. Total cinematic immersion.</p>
+            </div>
+        </section>
+
+        <!-- Section 5: Form -->
+        <section class="section" id="s5">
+            <div class="glass-panel text-overlay" style="pointer-events: auto;">
+                <h2 style="font-size: 2rem; margin-bottom: 10px;">ENTER THE OVERRIDE</h2>
+                <p style="font-size: 0.9rem; margin-bottom: 30px;">Secure your position for the Cannes Edition.</p>
+                <form onsubmit="event.preventDefault();">
+                    <input type="text" placeholder="IDENTIFICATION (NAME)" required>
+                    <input type="email" placeholder="COMMS_LINK (EMAIL)" required>
+                    <button type="submit">INITIATE HACK</button>
                 </form>
             </div>
         </section>
     </main>
 
-    <!-- GSAP & Plugins -->
+    <!-- Dependencies -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-    <!-- Three.js for WebGL Background -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <!-- Lenis for Smooth Scroll -->
-    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.19/bundled/lenis.min.js"></script>
 
     <script>
         gsap.registerPlugin(ScrollTrigger);
 
-        // --- Smooth Scroll (Lenis) ---
-        const lenis = new Lenis({
-            duration: 1.2,
-            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-            smooth: true
-        });
-
-        function raf(time) {
-            lenis.raf(time);
-            requestAnimationFrame(raf);
-        }
-        requestAnimationFrame(raf);
-
-        // Integrate Lenis with GSAP ScrollTrigger
-        lenis.on('scroll', ScrollTrigger.update);
-        gsap.ticker.add((time)=>{
-          lenis.raf(time * 1000);
-        });
-        gsap.ticker.lagSmoothing(0);
-
-        // --- Custom Cursor ---
-        const cursorDot = document.querySelector('.cursor-dot');
-        const cursorOutline = document.querySelector('.cursor-outline');
-        
-        let mouseX = window.innerWidth / 2;
-        let mouseY = window.innerHeight / 2;
-        let outlineX = mouseX;
-        let outlineY = mouseY;
-
-        window.addEventListener('mousemove', (e) => {
-            mouseX = e.clientX;
-            mouseY = e.clientY;
-            
-            cursorDot.style.left = mouseX + 'px';
-            cursorDot.style.top = mouseY + 'px';
-        });
-
-        // Smooth follow for outline
-        gsap.ticker.add(() => {
-            outlineX += (mouseX - outlineX) * 0.15;
-            outlineY += (mouseY - outlineY) * 0.15;
-            cursorOutline.style.left = outlineX + 'px';
-            cursorOutline.style.top = outlineY + 'px';
-        });
-
-        // Hover states for cursor
-        const hoverElements = document.querySelectorAll('button, input, [data-magnetic]');
-        hoverElements.forEach(el => {
-            el.addEventListener('mouseenter', () => {
-                cursorOutline.style.width = '80px';
-                cursorOutline.style.height = '80px';
-                cursorOutline.style.background = 'rgba(204, 255, 0, 0.1)';
-            });
-            el.addEventListener('mouseleave', () => {
-                cursorOutline.style.width = '40px';
-                cursorOutline.style.height = '40px';
-                cursorOutline.style.background = 'transparent';
-            });
-        });
-
-        // --- Magnetic Elements ---
-        const magnetics = document.querySelectorAll('[data-magnetic]');
-        magnetics.forEach(el => {
-            el.addEventListener('mousemove', (e) => {
-                const rect = el.getBoundingClientRect();
-                const x = e.clientX - rect.left - rect.width / 2;
-                const y = e.clientY - rect.top - rect.height / 2;
-                
-                gsap.to(el, {
-                    x: x * 0.4,
-                    y: y * 0.4,
-                    duration: 0.8,
-                    ease: 'power3.out'
-                });
-            });
-            
-            el.addEventListener('mouseleave', () => {
-                gsap.to(el, {
-                    x: 0,
-                    y: 0,
-                    duration: 1,
-                    ease: 'elastic.out(1, 0.3)'
-                });
-            });
-        });
-
-        // --- Simple Text Splitting Utility ---
-        function splitText(selector) {
-            document.querySelectorAll(selector).forEach(el => {
-                const text = el.innerText;
-                el.innerHTML = '';
-                const words = text.split(' ');
-                words.forEach((word, i) => {
-                    const wordDiv = document.createElement('div');
-                    wordDiv.className = 'word';
-                    
-                    // Handle HTML tags inside if needed (simplified here to just characters)
-                    [...word].forEach(char => {
-                        const charDiv = document.createElement('div');
-                        charDiv.className = 'char';
-                        charDiv.innerText = char;
-                        wordDiv.appendChild(charDiv);
-                    });
-                    
-                    el.appendChild(wordDiv);
-                    if(i < words.length - 1) {
-                        el.appendChild(document.createTextNode(' '));
-                    }
-                });
-            });
-        }
-
-        // --- Preloader Logic ---
-        let loadProgress = 0;
-        const loaderText = document.querySelector('.loader-text');
-        const loaderFill = document.querySelector('.loader-fill');
-        
-        const loadInterval = setInterval(() => {
-            loadProgress += Math.floor(Math.random() * 5) + 1;
-            if(loadProgress > 100) loadProgress = 100;
-            
-            const displayVal = String(loadProgress).padStart(3, '0');
-            loaderText.setAttribute('data-text', displayVal);
-            loaderText.innerText = displayVal;
-            loaderFill.setAttribute('data-text', displayVal);
-            loaderFill.innerText = displayVal;
-            
-            loaderFill.style.clipPath = `polygon(0 ${100 - loadProgress}%, 100% ${100 - loadProgress}%, 100% 100%, 0 100%)`;
-
-            if(loadProgress === 100) {
-                clearInterval(loadInterval);
-                initSite();
-            }
-        }, 30);
-
-        function initSite() {
-            splitText('[data-split]');
-            
-            const tl = gsap.timeline({
-                onComplete: () => {
-                    document.body.classList.remove('loading');
-                }
-            });
-
-            tl.to('.loader', {
-                yPercent: -100,
-                duration: 1,
-                ease: 'expo.inOut',
-                delay: 0.5
-            })
-            .from('.hero-subtitle .char', {
-                yPercent: 100,
-                opacity: 0,
-                stagger: 0.02,
-                duration: 0.8,
-                ease: 'power3.out'
-            }, "-=0.5")
-            .from('.layer-main .char', {
-                yPercent: 120,
-                rotationZ: 10,
-                opacity: 0,
-                stagger: 0.03,
-                duration: 1.2,
-                ease: 'expo.out'
-            }, "-=0.6");
-
-            initScrollAnimations();
-        }
-
-        // --- Scroll Animations ---
-        function initScrollAnimations() {
-            // Hero parallax
-            gsap.to('.hero-title-wrapper', {
-                yPercent: 50,
-                ease: 'none',
-                scrollTrigger: {
-                    trigger: '.s-hero',
-                    start: 'top top',
-                    end: 'bottom top',
-                    scrub: true
-                }
-            });
-
-            // Problem Section Text Reveal
-            gsap.utils.toArray('.s-problem [data-split]').forEach(el => {
-                gsap.from(el.querySelectorAll('.char'), {
-                    scrollTrigger: {
-                        trigger: el,
-                        start: 'top 85%',
-                    },
-                    yPercent: 100,
-                    opacity: 0,
-                    stagger: 0.01,
-                    duration: 0.8,
-                    ease: 'power3.out'
-                });
-            });
-
-            // Horizontal Scroll Section
-            const panels = gsap.utils.toArray('.h-panel');
-            gsap.to(panels, {
-                xPercent: -100 * (panels.length - 1),
-                ease: "none",
-                scrollTrigger: {
-                    trigger: ".s-horizontal",
-                    pin: true,
-                    scrub: 1,
-                    snap: 1 / (panels.length - 1),
-                    end: () => "+=" + document.querySelector(".horizontal-container").offsetWidth
-                }
-            });
-            
-            // Animate content inside horizontal panels
-            panels.forEach((panel, i) => {
-                if(i === 0) return; // Skip first as it's already visible
-                gsap.from(panel.querySelectorAll('.char'), {
-                    scrollTrigger: {
-                        trigger: panel,
-                        containerAnimation: ScrollTrigger.getAll()[ScrollTrigger.getAll().length-1],
-                        start: 'left center',
-                    },
-                    y: 50,
-                    opacity: 0,
-                    stagger: 0.02,
-                    duration: 0.8
-                });
-            });
-
-            // Cannes Section
-            gsap.from('.palm-3d', {
-                scrollTrigger: {
-                    trigger: '.s-cannes',
-                    start: 'top 70%'
-                },
-                scale: 0,
-                rotationY: 180,
-                duration: 1.5,
-                ease: 'expo.out'
-            });
-        }
-
-        // --- Three.js WebGL Background (Particles) ---
-        const canvas = document.getElementById('webgl-canvas');
+        // --- Three.js Setup ---
+        const container = document.getElementById('canvas-container');
         const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
         
+        // Fog matches the deepest part of the sunset gradient to blend edges
+        scene.fog = new THREE.FogExp2(0x461448, 0.012);
+
+        const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.z = 35; // Start far away
+
+        const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
         renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        container.appendChild(renderer.domElement);
 
-        // Create particles
-        const particlesGeometry = new THREE.BufferGeometry();
-        const particlesCount = 2000;
-        const posArray = new Float32Array(particlesCount * 3);
+        // --- Lighting ---
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+        scene.add(ambientLight);
 
-        for(let i = 0; i < particlesCount * 3; i++) {
-            posArray[i] = (Math.random() - 0.5) * 10;
+        // Warm sunset directional light
+        const dirLight = new THREE.DirectionalLight(0xffddaa, 1.5);
+        dirLight.position.set(10, 20, 10);
+        scene.add(dirLight);
+
+        // Colored point lights to make the glass pop
+        const pointLight1 = new THREE.PointLight(0xe86a58, 2, 50); // Orange/Red
+        pointLight1.position.set(5, 0, 5);
+        scene.add(pointLight1);
+
+        const pointLight2 = new THREE.PointLight(0x00ffff, 1.5, 50); // Cyan contrast
+        pointLight2.position.set(-5, -5, 5);
+        scene.add(pointLight2);
+
+        // --- Materials ---
+        // Glowing transparent glass material for screens
+        const glassMaterial = new THREE.MeshPhysicalMaterial({
+            color: 0xffffff,
+            metalness: 0.2,
+            roughness: 0.1,
+            transmission: 0.95, // Glass effect
+            thickness: 1.0,
+            transparent: true,
+            opacity: 1,
+            side: THREE.DoubleSide,
+            clearcoat: 1.0,
+            clearcoatRoughness: 0.1
+        });
+
+        // Dark metallic frame material
+        const frameMaterial = new THREE.MeshStandardMaterial({
+            color: 0x111111,
+            metalness: 0.9,
+            roughness: 0.3
+        });
+
+        // --- Central Structure Assembly ---
+        const panels = [];
+        const panelGroup = new THREE.Group();
+        scene.add(panelGroup);
+
+        const numPanels = 30;
+        
+        for(let i = 0; i < numPanels; i++) {
+            const group = new THREE.Group();
+            
+            // The Glass Screen
+            const screenGeometry = new THREE.PlaneGeometry(5, 3);
+            const screen = new THREE.Mesh(screenGeometry, glassMaterial);
+            group.add(screen);
+
+            // The Outer Frame
+            const frameGeometry = new THREE.BoxGeometry(5.2, 3.2, 0.1);
+            const frame = new THREE.Mesh(frameGeometry, frameMaterial);
+            frame.position.z = -0.06; // Slightly behind the glass
+            group.add(frame);
+
+            // Starting Position: Scattered chaotically around the camera
+            group.position.set(
+                (Math.random() - 0.5) * 80,
+                (Math.random() - 0.5) * 80,
+                (Math.random() - 0.5) * 40 + 10 // Pushed slightly forward
+            );
+            group.rotation.set(
+                Math.random() * Math.PI * 2,
+                Math.random() * Math.PI * 2,
+                Math.random() * Math.PI * 2
+            );
+
+            // Target Position: An organized cylindrical structure (like the video)
+            const angle = (i / (numPanels/3)) * Math.PI * 2;
+            const radius = 12;
+            const level = i % 3; // 3 distinct rings
+            const yOffset = (level - 1) * 3.5;
+
+            const targetPos = new THREE.Vector3(
+                Math.cos(angle) * radius,
+                yOffset,
+                Math.sin(angle) * radius
+            );
+            // Rotate to face outward from center
+            const targetRot = new THREE.Euler(0, -angle + Math.PI/2, 0);
+
+            panels.push({
+                mesh: group,
+                targetPos: targetPos,
+                targetRot: targetRot,
+                randomSpeed: Math.random() * 0.02 + 0.01 // for idle floating
+            });
+
+            panelGroup.add(group);
         }
 
-        particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
-
-        const material = new THREE.PointsMaterial({
-            size: 0.02,
-            color: 0xCCFF00,
+        // --- Central Glowing Beam ---
+        const beamGeo = new THREE.CylinderGeometry(1.5, 4, 100, 32, 1, true);
+        const beamMat = new THREE.MeshBasicMaterial({
+            color: 0xffddaa,
             transparent: true,
-            opacity: 0.4,
-            blending: THREE.AdditiveBlending
+            opacity: 0, // Starts invisible
+            blending: THREE.AdditiveBlending,
+            side: THREE.DoubleSide,
+            depthWrite: false
+        });
+        const beam = new THREE.Mesh(beamGeo, beamMat);
+        scene.add(beam);
+
+        // --- Sparkles / Dust Particles ---
+        const particleCount = 1500;
+        const particleGeo = new THREE.BufferGeometry();
+        const particlePos = new Float32Array(particleCount * 3);
+        
+        for(let i = 0; i < particleCount * 3; i++) {
+            // Spread particles across a wide area
+            particlePos[i] = (Math.random() - 0.5) * 60;
+        }
+        
+        particleGeo.setAttribute('position', new THREE.BufferAttribute(particlePos, 3));
+        const particleMat = new THREE.PointsMaterial({
+            color: 0xffeebb,
+            size: 0.15,
+            transparent: true,
+            blending: THREE.AdditiveBlending,
+            opacity: 0.8
+        });
+        const particles = new THREE.Points(particleGeo, particleMat);
+        scene.add(particles);
+
+        // --- GSAP Scroll Animations ---
+        // 1. Text reveals
+        const textOverlays = gsap.utils.toArray('.text-overlay');
+        textOverlays.forEach((text, i) => {
+            // Fade in and up
+            gsap.to(text, {
+                opacity: 1,
+                y: 0,
+                duration: 1,
+                scrollTrigger: {
+                    trigger: text.parentElement,
+                    start: "top 60%",
+                    end: "center center",
+                    scrub: 1
+                }
+            });
+            // Fade out and up on leave (except last section)
+            if (i < textOverlays.length - 1) {
+                gsap.to(text, {
+                    opacity: 0,
+                    y: -50,
+                    scrollTrigger: {
+                        trigger: text.parentElement,
+                        start: "center center",
+                        end: "bottom 40%",
+                        scrub: 1
+                    }
+                });
+            }
         });
 
-        const particlesMesh = new THREE.Points(particlesGeometry, material);
-        scene.add(particlesMesh);
-
-        camera.position.z = 3;
-
-        let tgX = 0;
-        let tgY = 0;
-
-        document.addEventListener('mousemove', (event) => {
-            tgX = (event.clientX / window.innerWidth) - 0.5;
-            tgY = (event.clientY / window.innerHeight) - 0.5;
+        // 2. The Grand 3D Assembly Timeline
+        const tl = gsap.timeline({
+            scrollTrigger: {
+                trigger: "main",
+                start: "top top",
+                end: "bottom bottom",
+                scrub: 1.5 // Smooth catchup
+            }
         });
 
-        window.addEventListener('scroll', () => {
-            particlesMesh.rotation.y = window.scrollY * 0.001;
+        // Move camera forward through the space
+        tl.to(camera.position, { z: 0, ease: "power1.inOut" }, 0);
+        
+        // Assemble the floating screens into the cylindrical structure
+        panels.forEach((p, i) => {
+            tl.to(p.mesh.position, {
+                x: p.targetPos.x,
+                y: p.targetPos.y,
+                z: p.targetPos.z,
+                ease: "power2.inOut"
+            }, 0);
+            tl.to(p.mesh.rotation, {
+                x: p.targetRot.x,
+                y: p.targetRot.y,
+                z: p.targetRot.z,
+                ease: "power2.inOut"
+            }, 0);
         });
 
+        // Beam fades in midway as structure assembles
+        tl.to(beamMat, { opacity: 0.2, ease: "power2.in" }, 0.3);
+
+        // Spin the entire structure around the user as they scroll deep into it
+        tl.to(panelGroup.rotation, { y: Math.PI * 1.5, ease: "none" }, 0);
+
+
+        // --- Render Loop ---
         const clock = new THREE.Clock();
-
+        
         function animate() {
             requestAnimationFrame(animate);
-            const elapsedTime = clock.getElapsedTime();
+            const time = clock.getElapsedTime();
 
-            particlesMesh.rotation.y += 0.001;
-            particlesMesh.rotation.x += 0.001;
-            
-            // Mouse interaction
-            particlesMesh.rotation.x += 0.05 * (tgY - particlesMesh.rotation.x);
-            particlesMesh.rotation.y += 0.05 * (tgX - particlesMesh.rotation.y);
-
-            // Wave effect
-            const positions = particlesGeometry.attributes.position.array;
-            for(let i = 0; i < particlesCount; i++) {
-                const i3 = i * 3;
-                const x = particlesGeometry.attributes.position.array[i3];
-                particlesGeometry.attributes.position.array[i3 + 1] += Math.sin(elapsedTime + x) * 0.002;
+            // Animate Sparkles (floating up like embers)
+            const positions = particles.geometry.attributes.position.array;
+            for(let i = 0; i < particleCount; i++) {
+                positions[i*3 + 1] += 0.03; // Move Y up
+                // Add slight sway to X
+                positions[i*3] += Math.sin(time + i) * 0.01; 
+                
+                // Reset if they float too high
+                if(positions[i*3 + 1] > 30) {
+                    positions[i*3 + 1] = -30;
+                }
             }
-            particlesGeometry.attributes.position.needsUpdate = true;
+            particles.geometry.attributes.position.needsUpdate = true;
+
+            // Idle floating animation for screens if they aren't fully assembled
+            // (We add a tiny sine wave to their Y position based on their individual speed)
+            panels.forEach((p, i) => {
+                p.mesh.position.y += Math.sin(time * 2 + i) * 0.005;
+            });
+
+            // Very slow idle rotation of the central beam
+            beam.rotation.y -= 0.005;
+
+            // Optional: Subtle camera sway mapped to mouse movement
+            // (Removed for absolute stability, but could be added here)
 
             renderer.render(scene, camera);
         }
         animate();
 
+        // --- Window Resize Handling ---
         window.addEventListener('resize', () => {
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
             renderer.setSize(window.innerWidth, window.innerHeight);
         });
-
     </script>
 </body>
 </html>

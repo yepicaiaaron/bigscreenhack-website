@@ -16,13 +16,13 @@
             overflow-x: hidden;
         }
         
-        /* Animated gradient background */
+        /* Animated gradient background - Cyberpunk Tech */
         .sunset-bg {
             position: fixed; 
             top: 0; left: 0; 
             width: 100vw; height: 100vh; 
             z-index: -2;
-            background: linear-gradient(180deg, #1a0a35 0%, #3d1a5c 25%, #7d2a6a 50%, #c94a6a 75%, #f06a5a 100%);
+            background: linear-gradient(180deg, #020024 0%, #090979 30%, #00d4ff 70%, #ff00c8 100%);
         }
 
         .gradient-anim {
@@ -219,10 +219,49 @@
             margin: 0; 
             letter-spacing: 0.2em;
             line-height: 1;
-            background: linear-gradient(to bottom, #ffffff 0%, #ffddaa 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            color: white;
+            text-shadow: 2px 2px #00d4ff, -2px -2px #ff00c8;
+            position: relative;
+        }
+        
+        h1::before, h1::after {
+            content: "THE BIG SCREEN\nHACK";
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: transparent;
+            color: white;
+            overflow: hidden;
+        }
+        
+        h1::before {
+            left: 2px;
+            text-shadow: -1px 0 #ff00c8;
+            clip: rect(24px, 550px, 90px, 0);
+            animation: glitch-anim-2 3s infinite linear alternate-reverse;
+        }
+        
+        h1::after {
+            left: -2px;
+            text-shadow: -1px 0 #00d4ff;
+            clip: rect(85px, 550px, 140px, 0);
+            animation: glitch-anim 2.5s infinite linear alternate-reverse;
+        }
+
+        @keyframes glitch-anim {
+            0% { clip: rect(20px, 9999px, 86px, 0); }
+            20% { clip: rect(65px, 9999px, 12px, 0); }
+            40% { clip: rect(104px, 9999px, 5px, 0); }
+            60% { clip: rect(44px, 9999px, 99px, 0); }
+            80% { clip: rect(81px, 9999px, 23px, 0); }
+            100% { clip: rect(12px, 9999px, 76px, 0); }
+        }
+        @keyframes glitch-anim-2 {
+            0% { clip: rect(65px, 9999px, 100px, 0); }
+            20% { clip: rect(12px, 9999px, 54px, 0); }
+            40% { clip: rect(89px, 9999px, 32px, 0); }
+            60% { clip: rect(23px, 9999px, 87px, 0); }
+            80% { clip: rect(98px, 9999px, 14px, 0); }
+            100% { clip: rect(45px, 9999px, 66px, 0); }
         }
         
         h2 { 

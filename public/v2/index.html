@@ -16,13 +16,13 @@
             overflow-x: hidden;
         }
         
-        /* Animated gradient background */
+        /* Animated gradient background - Dark Cinema */
         .sunset-bg {
             position: fixed; 
             top: 0; left: 0; 
             width: 100vw; height: 100vh; 
             z-index: -2;
-            background: linear-gradient(180deg, #1a0a35 0%, #3d1a5c 25%, #7d2a6a 50%, #c94a6a 75%, #f06a5a 100%);
+            background: linear-gradient(180deg, #050208 0%, #1a0510 30%, #3a0a1a 70%, #5a101a 100%);
         }
 
         .gradient-anim {
@@ -70,11 +70,11 @@
         .floating-frame .video-haze-overlay {
             position: absolute;
             inset: 0;
-            background: linear-gradient(135deg, rgba(255,180,100,0.3), rgba(255,100,50,0.3)); /* Glowy haze */
-            mix-blend-mode: overlay; /* Blend mode for glow effect */
+            background: linear-gradient(135deg, rgba(0,0,0,0.6), rgba(50,10,10,0.4)); /* Dark haze */
+            mix-blend-mode: multiply; /* Darker blend */
             pointer-events: none;
             z-index: 2; /* Above the GIF */
-            filter: blur(5px); /* Much less blur for the haze itself */
+            filter: blur(2px); /* Much less blur for the haze itself */
         }
 
         .floating-frame::before {
@@ -128,11 +128,11 @@
         .screen .video-haze-overlay {
             position: absolute;
             inset: 0;
-            background: linear-gradient(135deg, rgba(255,180,100,0.2), rgba(255,100,50,0.2)); /* Even lighter haze */
-            mix-blend-mode: overlay;
+            background: linear-gradient(135deg, rgba(0,0,0,0.5), rgba(50,0,0,0.3)); /* Darker haze */
+            mix-blend-mode: multiply;
             pointer-events: none;
             z-index: 2;
-            filter: blur(4px); /* Much less blur for the haze itself */
+            filter: blur(2px); /* Much less blur for the haze itself */
         }
 
         .screen::before {

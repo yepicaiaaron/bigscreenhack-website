@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Big Screen Hack - Cannes Edition | Hack Your Way to the Big Screen</title>
+    <meta name="description" content="24-hour creative marathon. Hack your way to the big screen with VideoStack. Cannes Film Festival edition.">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;600;800&family=Space+Grotesk:wght@700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/animations.css">
+</head>
+<body>
+    <!-- Progress Indicator -->
+    <div class="progress-bar">
+        <div class="progress-fill"></div>
+    </div>
+    
+    <!-- Section Indicators -->
+    <nav class="section-nav">
+        <div class="nav-node active" data-section="0"></div>
+        <div class="nav-node" data-section="1"></div>
+        <div class="nav-node" data-section="2"></div>
+        <div class="nav-node" data-section="3"></div>
+        <div class="nav-node" data-section="4"></div>
+        <div class="nav-node" data-section="5"></div>
+        <div class="nav-node" data-section="6"></div>
+    </nav>
+
+    <!-- Section 1: System Failure Boot -->
+    <section id="boot" class="section section-boot">
+        <div class="glitch-overlay"></div>
+        <div class="scan-lines"></div>
+        <div class="content">
+            <h1 class="glitch-text" data-text="SYSTEM_FAILURE">SYSTEM_FAILURE</h1>
+            <h2 class="glitch-text sub" data-text="REBOOT_NOW">REBOOT_NOW</h2>
+            <p class="boot-message">Initializing hack sequence...</p>
+            <div class="boot-cursor">_</div>
+        </div>
+        <div class="scroll-hint">
+            <span class="scroll-arrow">↓</span>
+            <span class="scroll-text">SCROLL TO REBOOT</span>
+        </div>
+    </section>
+
+    <!-- Section 2: The Big Screen Hack Title -->
+    <section id="title" class="section section-title">
+        <div class="noise-bg"></div>
+        <div class="content">
+            <div class="title-container">
+                <h1 class="main-title">
+                    <span class="title-line">THE BIG</span>
+                    <span class="title-line">SCREEN</span>
+                    <span class="title-line">HACK</span>
+                </h1>
+                <div class="edition-badge">
+                    <span class="badge-text">CANNES EDITION</span>
+                </div>
+            </div>
+            <p class="tagline">Hack your way to the big screen in 24 hours</p>
+        </div>
+    </section>
+
+    <!-- Section 3: Last Event Showcase -->
+    <section id="last-event" class="section section-last-event">
+        <div class="parallax-bg"></div>
+        <div class="content">
+            <h2 class="section-title-glitch">LAST_EVENT</h2>
+            <div class="event-showcase">
+                <div class="winner-card">
+                    <div class="card-frame">
+                        <div class="frame-corner tl"></div>
+                        <div class="frame-corner tr"></div>
+                        <div class="frame-corner bl"></div>
+                        <div class="frame-corner br"></div>
+                        <div class="winner-image">
+                            <div class="image-placeholder">WINNER_01</div>
+                        </div>
+                    </div>
+                    <h3 class="winner-name">BFI Premiere Winners</h3>
+                    <p class="winner-desc">Previous hack champions who made it to the big screen</p>
+                </div>
+                <div class="event-stats">
+                    <div class="stat">
+                        <span class="stat-number">24</span>
+                        <span class="stat-label">HOURS</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">100+</span>
+                        <span class="stat-label">HACKERS</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">12</span>
+                        <span class="stat-label">FILMS</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 4: VideoStack Tools -->
+    <section id="tools" class="section section-tools">
+        <div class="circuit-bg"></div>
+        <div class="content">
+            <h2 class="section-title-glitch">POWERED_BY_VIDEOSTACK</h2>
+            <p class="tools-intro">The creative toolkit that removes the pain of prompting</p>
+            
+            <div class="tools-grid">
+                <div class="tool-card" data-tool="story">
+                    <div class="tool-icon">
+                        <svg viewBox="0 0 64 64" class="icon-svg">
+                            <path d="M8 8h48v48H8z" fill="none" stroke="currentColor" stroke-width="2"/>
+                            <path d="M16 16h32v4H16zm0 12h24v4H16zm0 12h32v4H16zm0 12h20v4H16z" fill="currentColor"/>
+                        </svg>
+                    </div>
+                    <h3>Story-First Interface</h3>
+                    <p>Focus on your narrative, not prompts</p>
+                </div>
+                
+                <div class="tool-card" data-tool="ai">
+                    <div class="tool-icon">
+                        <svg viewBox="0 0 64 64" class="icon-svg">
+                            <circle cx="32" cy="32" r="24" fill="none" stroke="currentColor" stroke-width="2"/>
+                            <path d="M32 16v32M16 32h32" stroke="currentColor" stroke-width="2"/>
+                        </svg>
+                    </div>
+                    <h3>AI-Assisted Creation</h3>
+                    <p>Intelligent tools that understand your vision</p>
+                </div>
+                
+                <div class="tool-card" data-tool="collab">
+                    <div class="tool-icon">
+                        <svg viewBox="0 0 64 64" class="icon-svg">
+                            <circle cx="20" cy="32" r="12" fill="none" stroke="currentColor" stroke-width="2"/>
+                            <circle cx="44" cy="32" r="12" fill="none" stroke="currentColor" stroke-width="2"/>
+                            <path d="M32 20v24" stroke="currentColor" stroke-width="2"/>
+                        </svg>
+                    </div>
+                    <h3>Real-time Collaboration</h3>
+                    <p>Build with your team, seamlessly</p>
+                </div>
+                
+                <div class="tool-card" data-tool="speed">
+                    <div class="tool-icon">
+                        <svg viewBox="0 0 64 64" class="icon-svg">
+                            <path d="M8 32l16-16v12h32v8H24v12z" fill="none" stroke="currentColor" stroke-width="2"/>
+                        </svg>
+                    </div>
+                    <h3>Rapid Prototyping</h3>
+                    <p>From idea to screen in record time</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 5: 24-Hour Hack Concept -->
+    <section id="hack-concept" class="section section-hack-concept">
+        <div class="time-lapse-bg"></div>
+        <div class="content">
+            <div class="concept-header">
+                <h2 class="time-display">24:00:00</h2>
+                <p class="concept-subtitle">The Ultimate Creative Challenge</p>
+            </div>
+            
+            <div class="timeline">
+                <div class="timeline-item" data-time="00:00">
+                    <span class="time-marker">00:00</span>
+                    <span class="time-label">The Brief</span>
+                </div>
+                <div class="timeline-item" data-time="06:00">
+                    <span class="time-marker">06:00</span>
+                    <span class="time-label">Concept & Script</span>
+                </div>
+                <div class="timeline-item" data-time="12:00">
+                    <span class="time-marker">12:00</span>
+                    <span class="time-label">Production</span>
+                </div>
+                <div class="timeline-item" data-time="18:00">
+                    <span class="time-marker">18:00</span>
+                    <span class="time-label">Post & Polish</span>
+                </div>
+                <div class="timeline-item" data-time="24:00">
+                    <span class="time-marker">24:00</span>
+                    <span class="time-label">Premiere</span>
+                </div>
+            </div>
+            
+            <div class="concept-quote">
+                <blockquote>"From concept to screen in 24 hours. No prompts. Just pure creativity."</blockquote>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 6: Cannes Film Festival Preview -->
+    <section id="cannes" class="section section-cannes">
+        <div class="glamour-overlay"></div>
+        <div class="content">
+            <div class="cannes-header">
+                <div class="palm-icon">
+                    <svg viewBox="0 0 100 100" class="palm-svg">
+                        <path d="M50 10 L60 40 L90 35 L65 55 L75 85 L50 65 L25 85 L35 55 L10 35 L40 40 Z" 
+                              fill="none" stroke="currentColor" stroke-width="2"/>
+                    </svg>
+                </div>
+                <h2 class="section-title-glitch">CANNES_OVERRIDE</h2>
+                <p class="cannes-subtitle">The world's most prestigious stage awaits</p>
+            </div>
+            
+            <div class="event-details">
+                <div class="detail-card">
+                    <span class="detail-label">WHEN</span>
+                    <span class="detail-value">May 2026</span>
+                </div>
+                <div class="detail-card">
+                    <span class="detail-label">WHERE</span>
+                    <span class="detail-value">Cannes, France</span>
+                </div>
+                <div class="detail-card">
+                    <span class="detail-label">PRIZE</span>
+                    <span class="detail-value">Festival Premiere</span>
+                </div>
+            </div>
+            
+            <div class="cannes-preview">
+                <div class="preview-frame">
+                    <div class="preview-text">YOUR FILM HERE</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 7: Enter the Hack - CTA -->
+    <section id="cta" class="section section-cta">
+        <div class="content">
+            <h2 class="cta-title glitch-text" data-text="READY_TO_HACK?">READY_TO_HACK?</h2>
+            
+            <form class="hack-form" id="registrationForm">
+                <div class="form-field">
+                    <input type="text" id="name" placeholder="YOUR_NAME" required>
+                    <label for="name">Name</label>
+                </div>
+                <div class="form-field">
+                    <input type="email" id="email" placeholder="YOUR_EMAIL" required>
+                    <label for="email">Email</label>
+                </div>
+                <div class="form-field">
+                    <input type="text" id="role" placeholder="FILMMAKER_DEVELOPER_CREATIVE">
+                    <label for="role">Role</label>
+                </div>
+                <button type="submit" class="submit-btn">
+                    <span class="btn-text">ENTER_THE_HACK</span>
+                    <span class="btn-glitch"></span>
+                </button>
+            </form>
+            
+            <div class="social-links">
+                <a href="#" class="social-link" data-platform="twitter">TWITTER</a>
+                <a href="#" class="social-link" data-platform="instagram">INSTAGRAM</a>
+                <a href="#" class="social-link" data-platform="discord">DISCORD</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

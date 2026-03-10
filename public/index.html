@@ -7,45 +7,113 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;800&display=swap');
         
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
         body, html { 
-            margin: 0; 
-            padding: 0; 
             background: #0a0510; 
             font-family: 'Montserrat', sans-serif; 
-            overflow-x: hidden; 
-            overscroll-behavior: none;
+            overflow-x: hidden;
         }
         
-        /* 3D Canvas Background */
-        #canvas-container { 
-            position: fixed; 
-            top: 0; 
-            left: 0; 
-            width: 100vw; 
-            height: 100vh; 
-            z-index: 0; 
-            pointer-events: none;
-        }
-        
-        /* Sunset Sky Gradient */
         .sunset-bg {
             position: fixed; 
-            top: 0; 
-            left: 0; 
-            width: 100vw; 
-            height: 100vh; 
+            top: 0; left: 0; 
+            width: 100vw; height: 100vh; 
             z-index: -1;
-            background: linear-gradient(180deg, #160a2c 0%, #461448 35%, #9b2d5a 65%, #e86a58 100%);
+            background: linear-gradient(180deg, #1a0a35 0%, #3d1a5c 25%, #7d2a6a 50%, #c94a6a 75%, #f06a5a 100%);
         }
 
-        /* Content Layout */
+        /* Animated gradient overlay */
+        .gradient-anim {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            z-index: 0;
+            background: radial-gradient(ellipse at 50% 50%, rgba(255,200,150,0.1) 0%, transparent 50%);
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.2); opacity: 0.8; }
+        }
+
+        /* Floating screens - CSS version */
+        .screens-container {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            z-index: 1;
+            pointer-events: none;
+            perspective: 1000px;
+        }
+
+        .screen {
+            position: absolute;
+            width: 120px; height: 80px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 4px;
+            box-shadow: 
+                0 0 20px rgba(255,200,150,0.2),
+                inset 0 0 20px rgba(255,255,255,0.05);
+            backdrop-filter: blur(5px);
+            transform-style: preserve-3d;
+            transition: transform 0.1s linear;
+        }
+
+        .screen::before {
+            content: '';
+            position: absolute;
+            top: 5px; left: 5px; right: 5px; bottom: 5px;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 2px;
+        }
+
+        /* Light beam */
+        .light-beam {
+            position: fixed;
+            top: 50%; left: 50%;
+            width: 200px; height: 600px;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(to bottom, 
+                rgba(255,220,180,0) 0%,
+                rgba(255,220,180,0.3) 50%,
+                rgba(255,220,180,0) 100%);
+            filter: blur(40px);
+            z-index: 2;
+            opacity: 0;
+            transition: opacity 1s;
+        }
+
+        .light-beam.active {
+            opacity: 1;
+            animation: beamPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes beamPulse {
+            0%, 100% { opacity: 0.3; transform: translate(-50%, -50%) scaleX(1); }
+            50% { opacity: 0.6; transform: translate(-50%, -50%) scaleX(1.3); }
+        }
+
+        /* Sparkles */
+        .sparkle {
+            position: fixed;
+            width: 4px; height: 4px;
+            background: white;
+            border-radius: 50%;
+            box-shadow: 0 0 10px white, 0 0 20px #ffcc88;
+            z-index: 3;
+            pointer-events: none;
+        }
+
         main { 
             position: relative; 
             z-index: 10; 
         }
         
         .section { 
-            height: 120vh; /* Extra height for scrolling room */
+            height: 100vh;
             display: flex; 
             align-items: center; 
             justify-content: center; 
@@ -53,123 +121,123 @@
             padding: 0 5vw;
         }
 
-        /* Typography */
         .text-overlay { 
             color: white; 
             text-transform: uppercase; 
-            text-shadow: 0 0 30px rgba(0,0,0,0.8), 0 0 10px rgba(255,255,255,0.2); 
-            opacity: 0; /* Hidden initially for GSAP */
+            text-shadow: 0 0 40px rgba(0,0,0,0.8), 0 0 20px rgba(255,255,255,0.3); 
+            opacity: 0;
             transform: translateY(50px);
+            transition: opacity 0.8s, transform 0.8s;
+        }
+
+        .text-overlay.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
         
         h1 { 
-            font-size: clamp(3rem, 6vw, 8rem); 
+            font-size: clamp(2.5rem, 5vw, 6rem); 
             font-weight: 800; 
             margin: 0; 
-            letter-spacing: 0.1em;
+            letter-spacing: 0.15em;
             line-height: 1.1;
         }
         
         h2 { 
-            font-size: clamp(2rem, 4vw, 5rem); 
+            font-size: clamp(1.5rem, 3vw, 4rem); 
             font-weight: 300; 
             margin: 0; 
-            letter-spacing: 0.15em;
+            letter-spacing: 0.2em;
         }
         
         p { 
-            font-size: clamp(1rem, 1.2vw, 1.5rem); 
+            font-size: clamp(0.9rem, 1.1vw, 1.3rem); 
             font-weight: 500; 
-            max-width: 600px; 
+            max-width: 550px; 
             margin: 20px auto; 
-            line-height: 1.6; 
-            letter-spacing: 0.05em;
-            color: #ffdddd;
+            line-height: 1.7; 
+            letter-spacing: 0.08em;
+            color: #ffeecc;
         }
 
-        /* Glassmorphism Form Panel */
         .glass-panel { 
-            background: rgba(20, 0, 10, 0.4); 
-            backdrop-filter: blur(20px); 
-            -webkit-backdrop-filter: blur(20px); 
-            border: 1px solid rgba(255,255,255,0.2); 
-            padding: 60px 40px; 
-            border-radius: 24px; 
-            box-shadow: 0 30px 60px rgba(0,0,0,0.5), inset 0 0 20px rgba(255,255,255,0.05);
+            background: rgba(20, 5, 15, 0.35); 
+            backdrop-filter: blur(25px); 
+            border: 1px solid rgba(255,255,255,0.15); 
+            padding: 50px 40px; 
+            border-radius: 20px; 
+            box-shadow: 0 40px 80px rgba(0,0,0,0.4), inset 0 0 30px rgba(255,255,255,0.03);
             width: 100%;
-            max-width: 500px;
+            max-width: 450px;
         }
 
-        /* Form Elements */
         input { 
             background: transparent; 
             border: none; 
-            border-bottom: 2px solid rgba(255,255,255,0.3); 
+            border-bottom: 1px solid rgba(255,255,255,0.25); 
             color: white; 
-            padding: 15px 10px; 
+            padding: 18px 10px; 
             font-family: inherit; 
-            font-size: 1rem; 
+            font-size: 0.95rem; 
             width: 100%; 
-            margin-bottom: 30px; 
+            margin-bottom: 25px; 
             transition: 0.3s;
+            letter-spacing: 0.05em;
         }
         
         input:focus { 
             outline: none; 
-            border-bottom: 2px solid #e86a58; 
-            background: rgba(255,255,255,0.05);
+            border-bottom: 1px solid #f06a5a; 
+            background: rgba(255,255,255,0.03);
         }
         
-        input::placeholder {
-            color: rgba(255,255,255,0.5);
-            letter-spacing: 0.1em;
-        }
+        input::placeholder { color: rgba(255,255,255,0.4); letter-spacing: 0.1em; }
 
         button { 
             background: white; 
-            color: #160a2c; 
+            color: #1a0a35; 
             border: none; 
-            padding: 20px 40px; 
+            padding: 18px 50px; 
             font-family: inherit; 
-            font-size: 1rem;
+            font-size: 0.9rem;
             font-weight: 800; 
-            letter-spacing: 0.15em; 
+            letter-spacing: 0.2em; 
             cursor: pointer; 
             border-radius: 50px; 
             transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); 
             width: 100%;
-            margin-top: 10px;
+            margin-top: 15px;
         }
         
         button:hover { 
-            background: #e86a58; 
+            background: #f06a5a; 
             color: white; 
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(232, 106, 88, 0.4);
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(240, 106, 90, 0.4);
         }
 
         .scroll-indicator {
             position: absolute;
-            bottom: 5vh;
+            bottom: 8vh;
             left: 50%;
             transform: translateX(-50%);
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 15px;
-            opacity: 0.7;
+            gap: 12px;
+            opacity: 0.6;
             animation: bounce 2s infinite;
         }
 
         .scroll-indicator span {
-            font-size: 0.8rem;
-            letter-spacing: 0.3em;
+            font-size: 0.7rem;
+            letter-spacing: 0.4em;
             color: white;
         }
 
         .scroll-line {
-            width: 2px;
-            height: 40px;
+            width: 1px;
+            height: 50px;
             background: linear-gradient(to bottom, white, transparent);
         }
 
@@ -181,52 +249,50 @@
     </style>
 </head>
 <body>
-    <!-- Background layers -->
     <div class="sunset-bg"></div>
-    <div id="canvas-container"></div>
+    <div class="gradient-anim"></div>
+    
+    <div class="screens-container" id="screens"></div>
+    <div class="light-beam" id="beam"></div>
+    <div id="sparkles"></div>
 
     <main>
-        <!-- Section 1: Hero -->
         <section class="section" id="s1">
-            <div class="text-overlay">
+            <div class="text-overlay visible">
                 <h1>THE BIG SCREEN<br>HACK</h1>
                 <div class="scroll-indicator">
-                    <span>DESCEND</span>
+                    <span>SCROLL</span>
                     <div class="scroll-line"></div>
                 </div>
             </div>
         </section>
 
-        <!-- Section 2: VideoStack -->
         <section class="section" id="s2">
-            <div class="text-overlay">
+            <div class="text-overlay" data-animate>
                 <h2>POWERED BY<br>VIDEOSTACK</h2>
-                <p>The world's first original storytelling production engine. We remove the pain of prompting.</p>
+                <p>The world's first original storytelling production engine.<br>We remove the pain of prompting.</p>
             </div>
         </section>
 
-        <!-- Section 3: BFI -->
         <section class="section" id="s3">
-            <div class="text-overlay">
+            <div class="text-overlay" data-animate>
                 <h2>FROM THE BFI<br>PREMIERE</h2>
-                <p>Where outlier ideas shattered the noise and claimed the big screen.</p>
+                <p>Where outlier ideas shattered the noise<br>and claimed the big screen.</p>
             </div>
         </section>
 
-        <!-- Section 4: Cannes -->
         <section class="section" id="s4">
-            <div class="text-overlay">
-                <h1 style="color: #ffddaa;">TO THE CANNES<br>EDITION</h1>
-                <p>Hack your way to the ultimate stage in 24 hours. No scrolling past. Total cinematic immersion.</p>
+            <div class="text-overlay" data-animate>
+                <h1 style="color: #ffddbb;">TO THE CANNES<br>EDITION</h1>
+                <p>Hack your way to the ultimate stage in 24 hours.<br>No scrolling past. Total cinematic immersion.</p>
             </div>
         </section>
 
-        <!-- Section 5: Form -->
         <section class="section" id="s5">
-            <div class="glass-panel text-overlay" style="pointer-events: auto;">
-                <h2 style="font-size: 2rem; margin-bottom: 10px;">ENTER THE OVERRIDE</h2>
-                <p style="font-size: 0.9rem; margin-bottom: 30px;">Secure your position for the Cannes Edition.</p>
-                <form onsubmit="event.preventDefault();">
+            <div class="glass-panel text-overlay" data-animate style="pointer-events: auto;">
+                <h2 style="font-size: 1.5rem; margin-bottom: 8px;">ENTER THE OVERRIDE</h2>
+                <p style="font-size: 0.8rem; margin-bottom: 35px; opacity: 0.8;">Secure your position for the Cannes Edition.</p>
+                <form onsubmit="event.preventDefault(); alert('Registration captured!');">
                     <input type="text" placeholder="IDENTIFICATION (NAME)" required>
                     <input type="email" placeholder="COMMS_LINK (EMAIL)" required>
                     <button type="submit">INITIATE HACK</button>
@@ -235,270 +301,110 @@
         </section>
     </main>
 
-    <!-- Dependencies -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-
     <script>
-        gsap.registerPlugin(ScrollTrigger);
+        // Create floating screens
+        const screensContainer = document.getElementById('screens');
+        const numScreens = 25;
+        const screens = [];
 
-        // --- Three.js Setup ---
-        const container = document.getElementById('canvas-container');
-        const scene = new THREE.Scene();
-        
-        // Fog matches the deepest part of the sunset gradient to blend edges
-        scene.fog = new THREE.FogExp2(0x461448, 0.012);
-
-        const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
-        camera.position.z = 35; // Start far away
-
-        const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-        container.appendChild(renderer.domElement);
-
-        // --- Lighting ---
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
-        scene.add(ambientLight);
-
-        // Warm sunset directional light
-        const dirLight = new THREE.DirectionalLight(0xffddaa, 1.5);
-        dirLight.position.set(10, 20, 10);
-        scene.add(dirLight);
-
-        // Colored point lights to make the glass pop
-        const pointLight1 = new THREE.PointLight(0xe86a58, 2, 50); // Orange/Red
-        pointLight1.position.set(5, 0, 5);
-        scene.add(pointLight1);
-
-        const pointLight2 = new THREE.PointLight(0x00ffff, 1.5, 50); // Cyan contrast
-        pointLight2.position.set(-5, -5, 5);
-        scene.add(pointLight2);
-
-        // --- Materials ---
-        // Glowing transparent glass material for screens
-        const glassMaterial = new THREE.MeshPhysicalMaterial({
-            color: 0xffffff,
-            metalness: 0.2,
-            roughness: 0.1,
-            transmission: 0.95, // Glass effect
-            thickness: 1.0,
-            transparent: true,
-            opacity: 1,
-            side: THREE.DoubleSide,
-            clearcoat: 1.0,
-            clearcoatRoughness: 0.1
-        });
-
-        // Dark metallic frame material
-        const frameMaterial = new THREE.MeshStandardMaterial({
-            color: 0x111111,
-            metalness: 0.9,
-            roughness: 0.3
-        });
-
-        // --- Central Structure Assembly ---
-        const panels = [];
-        const panelGroup = new THREE.Group();
-        scene.add(panelGroup);
-
-        const numPanels = 30;
-        
-        for(let i = 0; i < numPanels; i++) {
-            const group = new THREE.Group();
+        for(let i = 0; i < numScreens; i++) {
+            const screen = document.createElement('div');
+            screen.className = 'screen';
             
-            // The Glass Screen
-            const screenGeometry = new THREE.PlaneGeometry(5, 3);
-            const screen = new THREE.Mesh(screenGeometry, glassMaterial);
-            group.add(screen);
-
-            // The Outer Frame
-            const frameGeometry = new THREE.BoxGeometry(5.2, 3.2, 0.1);
-            const frame = new THREE.Mesh(frameGeometry, frameMaterial);
-            frame.position.z = -0.06; // Slightly behind the glass
-            group.add(frame);
-
-            // Starting Position: Scattered chaotically around the camera
-            group.position.set(
-                (Math.random() - 0.5) * 80,
-                (Math.random() - 0.5) * 80,
-                (Math.random() - 0.5) * 40 + 10 // Pushed slightly forward
-            );
-            group.rotation.set(
-                Math.random() * Math.PI * 2,
-                Math.random() * Math.PI * 2,
-                Math.random() * Math.PI * 2
-            );
-
-            // Target Position: An organized cylindrical structure (like the video)
-            const angle = (i / (numPanels/3)) * Math.PI * 2;
-            const radius = 12;
-            const level = i % 3; // 3 distinct rings
-            const yOffset = (level - 1) * 3.5;
-
-            const targetPos = new THREE.Vector3(
-                Math.cos(angle) * radius,
-                yOffset,
-                Math.sin(angle) * radius
-            );
-            // Rotate to face outward from center
-            const targetRot = new THREE.Euler(0, -angle + Math.PI/2, 0);
-
-            panels.push({
-                mesh: group,
-                targetPos: targetPos,
-                targetRot: targetRot,
-                randomSpeed: Math.random() * 0.02 + 0.01 // for idle floating
+            // Random starting positions scattered around
+            const startX = (Math.random() - 0.5) * 150;
+            const startY = (Math.random() - 0.5) * 150;
+            const startZ = Math.random() * 500 - 200;
+            const startRotX = Math.random() * 360;
+            const startRotY = Math.random() * 360;
+            
+            screen.style.left = '50%';
+            screen.style.top = '50%';
+            screen.style.marginLeft = '-60px';
+            screen.style.marginTop = '-40px';
+            
+            // Target position - cylindrical arrangement
+            const angle = (i / (numScreens/3)) * Math.PI * 2;
+            const radius = 40;
+            const level = i % 3;
+            const targetX = Math.cos(angle) * radius;
+            const targetY = (level - 1) * 30;
+            const targetZ = Math.sin(angle) * radius;
+            
+            screens.push({
+                el: screen,
+                startX, startY, startZ, startRotX, startRotY,
+                targetX, targetY, targetZ
             });
-
-            panelGroup.add(group);
+            
+            screensContainer.appendChild(screen);
         }
 
-        // --- Central Glowing Beam ---
-        const beamGeo = new THREE.CylinderGeometry(1.5, 4, 100, 32, 1, true);
-        const beamMat = new THREE.MeshBasicMaterial({
-            color: 0xffddaa,
-            transparent: true,
-            opacity: 0, // Starts invisible
-            blending: THREE.AdditiveBlending,
-            side: THREE.DoubleSide,
-            depthWrite: false
-        });
-        const beam = new THREE.Mesh(beamGeo, beamMat);
-        scene.add(beam);
-
-        // --- Sparkles / Dust Particles ---
-        const particleCount = 1500;
-        const particleGeo = new THREE.BufferGeometry();
-        const particlePos = new Float32Array(particleCount * 3);
-        
-        for(let i = 0; i < particleCount * 3; i++) {
-            // Spread particles across a wide area
-            particlePos[i] = (Math.random() - 0.5) * 60;
+        // Create sparkles
+        const sparklesContainer = document.getElementById('sparkles');
+        for(let i = 0; i < 30; i++) {
+            const sparkle = document.createElement('div');
+            sparkle.className = 'sparkle';
+            sparkle.style.left = Math.random() * 100 + 'vw';
+            sparkle.style.top = Math.random() * 100 + 'vh';
+            sparkle.style.animationDelay = Math.random() * 3 + 's';
+            sparklesContainer.appendChild(sparkle);
+            
+            // Animate sparkles floating up
+            setInterval(() => {
+                let top = parseFloat(sparkle.style.top);
+                top -= 0.5;
+                if(top < -5) top = 105;
+                sparkle.style.top = top + 'vh';
+                sparkle.style.left = (parseFloat(sparkle.style.left) + Math.sin(Date.now()/1000 + i) * 0.1) + 'vw';
+            }, 50);
         }
-        
-        particleGeo.setAttribute('position', new THREE.BufferAttribute(particlePos, 3));
-        const particleMat = new THREE.PointsMaterial({
-            color: 0xffeebb,
-            size: 0.15,
-            transparent: true,
-            blending: THREE.AdditiveBlending,
-            opacity: 0.8
-        });
-        const particles = new THREE.Points(particleGeo, particleMat);
-        scene.add(particles);
 
-        // --- GSAP Scroll Animations ---
-        // 1. Text reveals
-        const textOverlays = gsap.utils.toArray('.text-overlay');
-        textOverlays.forEach((text, i) => {
-            // Fade in and up
-            gsap.to(text, {
-                opacity: 1,
-                y: 0,
-                duration: 1,
-                scrollTrigger: {
-                    trigger: text.parentElement,
-                    start: "top 60%",
-                    end: "center center",
-                    scrub: 1
-                }
-            });
-            // Fade out and up on leave (except last section)
-            if (i < textOverlays.length - 1) {
-                gsap.to(text, {
-                    opacity: 0,
-                    y: -50,
-                    scrollTrigger: {
-                        trigger: text.parentElement,
-                        start: "center center",
-                        end: "bottom 40%",
-                        scrub: 1
-                    }
-                });
-            }
-        });
+        // Scroll animation
+        const textOverlays = document.querySelectorAll('[data-animate]');
+        const beam = document.getElementById('beam');
 
-        // 2. The Grand 3D Assembly Timeline
-        const tl = gsap.timeline({
-            scrollTrigger: {
-                trigger: "main",
-                start: "top top",
-                end: "bottom bottom",
-                scrub: 1.5 // Smooth catchup
-            }
-        });
-
-        // Move camera forward through the space
-        tl.to(camera.position, { z: 0, ease: "power1.inOut" }, 0);
-        
-        // Assemble the floating screens into the cylindrical structure
-        panels.forEach((p, i) => {
-            tl.to(p.mesh.position, {
-                x: p.targetPos.x,
-                y: p.targetPos.y,
-                z: p.targetPos.z,
-                ease: "power2.inOut"
-            }, 0);
-            tl.to(p.mesh.rotation, {
-                x: p.targetRot.x,
-                y: p.targetRot.y,
-                z: p.targetRot.z,
-                ease: "power2.inOut"
-            }, 0);
-        });
-
-        // Beam fades in midway as structure assembles
-        tl.to(beamMat, { opacity: 0.2, ease: "power2.in" }, 0.3);
-
-        // Spin the entire structure around the user as they scroll deep into it
-        tl.to(panelGroup.rotation, { y: Math.PI * 1.5, ease: "none" }, 0);
-
-
-        // --- Render Loop ---
-        const clock = new THREE.Clock();
-        
-        function animate() {
-            requestAnimationFrame(animate);
-            const time = clock.getElapsedTime();
-
-            // Animate Sparkles (floating up like embers)
-            const positions = particles.geometry.attributes.position.array;
-            for(let i = 0; i < particleCount; i++) {
-                positions[i*3 + 1] += 0.03; // Move Y up
-                // Add slight sway to X
-                positions[i*3] += Math.sin(time + i) * 0.01; 
+        function updateScreens() {
+            const scrollY = window.scrollY;
+            const maxScroll = document.body.scrollHeight - window.innerHeight;
+            const progress = Math.min(scrollY / maxScroll, 1);
+            
+            screens.forEach((s, i) => {
+                // Interpolate position based on scroll
+                const x = s.startX + (s.targetX - s.startX) * progress;
+                const y = s.startY + (s.targetY - s.startY) * progress;
+                const z = s.startZ + (targetZ - s.startZ) * progress;
                 
-                // Reset if they float too high
-                if(positions[i*3 + 1] > 30) {
-                    positions[i*3 + 1] = -30;
-                }
-            }
-            particles.geometry.attributes.position.needsUpdate = true;
-
-            // Idle floating animation for screens if they aren't fully assembled
-            // (We add a tiny sine wave to their Y position based on their individual speed)
-            panels.forEach((p, i) => {
-                p.mesh.position.y += Math.sin(time * 2 + i) * 0.005;
+                // Rotate as they assemble
+                const rotY = s.startRotY + progress * 360;
+                const rotX = 45 + progress * 45; // Tilt more as they come together
+                
+                s.el.style.transform = `translate3d(${x}vw, ${y}vh, ${z}px) rotateX(${rotX}deg) rotateY(${rotY}deg)`;
+                s.el.style.opacity = 0.3 + progress * 0.7;
             });
-
-            // Very slow idle rotation of the central beam
-            beam.rotation.y -= 0.005;
-
-            // Optional: Subtle camera sway mapped to mouse movement
-            // (Removed for absolute stability, but could be added here)
-
-            renderer.render(scene, camera);
+            
+            // Show beam in middle of scroll
+            if(progress > 0.3 && progress < 0.8) {
+                beam.classList.add('active');
+            } else {
+                beam.classList.remove('active');
+            }
         }
-        animate();
 
-        // --- Window Resize Handling ---
-        window.addEventListener('resize', () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-        });
+        // Text reveal on scroll
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if(entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.3 });
+
+        textOverlays.forEach(el => observer.observe(el));
+
+        // Update on scroll
+        window.addEventListener('scroll', updateScreens);
+        updateScreens(); // Initial position
     </script>
 </body>
 </html>

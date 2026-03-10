@@ -63,7 +63,7 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            filter: blur(5px) brightness(1.8); /* Less blur, more brightness for GIF */
+            filter: blur(2px) brightness(2); /* Drastically less blur, much brighter GIF */
             transform: scale(1.1); /* Slightly scale to avoid blur edges */
         }
 
@@ -74,7 +74,7 @@
             mix-blend-mode: overlay; /* Blend mode for glow effect */
             pointer-events: none;
             z-index: 2; /* Above the GIF */
-            filter: blur(10px); /* Less blur for the haze itself */
+            filter: blur(5px); /* Much less blur for the haze itself */
         }
 
         .floating-frame::before {
@@ -120,9 +120,9 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            filter: blur(3px) brightness(1.5); /* Less blur, more brightness for screens (GIFs) */
+            filter: blur(1px) brightness(2); /* Drastically less blur, much brighter for screens (GIFs) */
             transform: scale(1.1); /* Slightly scale to avoid blur edges */
-            opacity: 0.8; /* Higher opacity for screens to see GIF content */
+            opacity: 0.9; /* Much higher opacity for screens to see GIF content */
         }
 
         .screen .video-haze-overlay {
@@ -132,7 +132,7 @@
             mix-blend-mode: overlay;
             pointer-events: none;
             z-index: 2;
-            filter: blur(8px); /* Less blur for the haze itself */
+            filter: blur(4px); /* Much less blur for the haze itself */
         }
 
         .screen::before {

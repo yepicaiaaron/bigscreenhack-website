@@ -63,7 +63,7 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            filter: blur(15px) brightness(1.5); /* Blur and brighten the video */
+            filter: blur(15px) brightness(1.5); /* Blur and brighten the GIF */
             transform: scale(1.1); /* Slightly scale to avoid blur edges */
         }
 
@@ -73,7 +73,7 @@
             background: linear-gradient(135deg, rgba(255,180,100,0.3), rgba(255,100,50,0.3)); /* Glowy haze */
             mix-blend-mode: overlay; /* Blend mode for glow effect */
             pointer-events: none;
-            z-index: 2; /* Above the video */
+            z-index: 2; /* Above the GIF */
             filter: blur(20px); /* Further blur the haze itself */
         }
 
@@ -120,7 +120,7 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            filter: blur(10px) brightness(1.2); /* Subtle blur and brighten for screens */
+            filter: blur(10px) brightness(1.2); /* Subtle blur and brighten for screens (GIFs) */
             transform: scale(1.1); /* Slightly scale to avoid blur edges */
             opacity: 0.6; /* Lower opacity to blend more subtly */
         }
@@ -667,27 +667,27 @@
     <!-- Parallax layers -->
     <div class="parallax-layer" id="parallax-deep">
         <div class="floating-frame frame-1" data-speed="0.8" data-dir="1">
-            <video class="frame-video" src="https://www.w3schools.com/html/mov_bbb.mp4" autoplay loop muted playsinline></video>
+            <img class="frame-video" src="https://media.giphy.com/media/l4pSXrXn83P1656xW/giphy.gif" alt="abstract glowy animation" />
             <div class="video-haze-overlay"></div>
         </div>
         <div class="floating-frame frame-2" data-speed="1.2" data-dir="1">
-            <video class="frame-video" src="https://www.w3schools.com/html/mov_bbb.mp4" autoplay loop muted playsinline></video>
+            <img class="frame-video" src="https://media.giphy.com/media/l4pSXrXn83P1656xW/giphy.gif" alt="abstract glowy animation" />
             <div class="video-haze-overlay"></div>
         </div>
     </div>
     <div class="parallax-layer" id="parallax-mid">
         <div class="floating-frame frame-3" data-speed="1.5" data-dir="-1">
-            <video class="frame-video" src="https://www.w3schools.com/html/mov_bbb.mp4" autoplay loop muted playsinline></video>
+            <img class="frame-video" src="https://media.giphy.com/media/l4pSXrXn83P1656xW/giphy.gif" alt="abstract glowy animation" />
             <div class="video-haze-overlay"></div>
         </div>
         <div class="floating-frame frame-4" data-speed="0.9" data-dir="-1">
-            <video class="frame-video" src="https://www.w3schools.com/html/mov_bbb.mp4" autoplay loop muted playsinline></video>
+            <img class="frame-video" src="https://media.giphy.com/media/l4pSXrXn83P1656xW/giphy.gif" alt="abstract glowy animation" />
             <div class="video-haze-overlay"></div>
         </div>
     </div>
     <div class="parallax-layer" id="parallax-front">
         <div class="floating-frame frame-5" data-speed="2.2" data-dir="1">
-            <video class="frame-video" src="https://www.w3schools.com/html/mov_bbb.mp4" autoplay loop muted playsinline></video>
+            <img class="frame-video" src="https://media.giphy.com/media/l4pSXrXn83P1656xW/giphy.gif" alt="abstract glowy animation" />
             <div class="video-haze-overlay"></div>
         </div>
     </div>
@@ -869,7 +869,7 @@
             const screen = document.createElement('div');
             screen.className = 'screen';
             screen.innerHTML = `
-                <video class="screen-video" src="https://www.w3schools.com/html/mov_bbb.mp4" autoplay loop muted playsinline></video>
+                <img class="screen-video" src="https://media.giphy.com/media/l4pSXrXn83P1656xW/giphy.gif" alt="abstract glowy animation" />
                 <div class="video-haze-overlay"></div>
             `;
             

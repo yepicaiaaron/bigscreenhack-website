@@ -8,7 +8,7 @@
     <meta http-equiv="Expires" content="0">
     <title>THE BIG SCREEN HACK — CANNES EDITION</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;800&display=swap');
         
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
@@ -26,7 +26,6 @@
             background: linear-gradient(180deg, #1a0a35 0%, #3d1a5c 25%, #7d2a6a 50%, #c94a6a 75%, #f06a5a 100%);
         }
 
-        /* Animated gradient overlay */
         .gradient-anim {
             position: fixed;
             top: 0; left: 0;
@@ -41,7 +40,7 @@
             50% { transform: scale(1.2); opacity: 0.8; }
         }
 
-        /* Floating screens - CSS version */
+        /* Floating screens */
         .screens-container {
             position: fixed;
             top: 0; left: 0;
@@ -53,37 +52,45 @@
 
         .screen {
             position: absolute;
-            width: 120px; height: 80px;
-            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
-            border: 1px solid rgba(255,255,255,0.2);
-            border-radius: 4px;
+            width: 140px; height: 90px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.15), rgba(255,255,255,0.05));
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 6px;
             box-shadow: 
-                0 0 20px rgba(255,200,150,0.2),
-                inset 0 0 20px rgba(255,255,255,0.05);
-            backdrop-filter: blur(5px);
+                0 0 30px rgba(255,200,150,0.3),
+                inset 0 0 30px rgba(255,255,255,0.1);
+            backdrop-filter: blur(8px);
             transform-style: preserve-3d;
             transition: transform 0.1s linear;
+            overflow: hidden;
         }
 
         .screen::before {
             content: '';
             position: absolute;
-            top: 5px; left: 5px; right: 5px; bottom: 5px;
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 2px;
+            top: 8px; left: 8px; right: 8px; bottom: 8px;
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 3px;
+            background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.1) 50%, transparent 70%);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
         }
 
         /* Light beam */
         .light-beam {
             position: fixed;
             top: 50%; left: 50%;
-            width: 200px; height: 600px;
+            width: 300px; height: 800px;
             transform: translate(-50%, -50%);
             background: linear-gradient(to bottom, 
                 rgba(255,220,180,0) 0%,
-                rgba(255,220,180,0.3) 50%,
+                rgba(255,220,180,0.4) 50%,
                 rgba(255,220,180,0) 100%);
-            filter: blur(40px);
+            filter: blur(60px);
             z-index: 2;
             opacity: 0;
             transition: opacity 1s;
@@ -91,21 +98,21 @@
 
         .light-beam.active {
             opacity: 1;
-            animation: beamPulse 2s ease-in-out infinite;
+            animation: beamPulse 3s ease-in-out infinite;
         }
 
         @keyframes beamPulse {
-            0%, 100% { opacity: 0.3; transform: translate(-50%, -50%) scaleX(1); }
-            50% { opacity: 0.6; transform: translate(-50%, -50%) scaleX(1.3); }
+            0%, 100% { opacity: 0.4; transform: translate(-50%, -50%) scaleX(1); }
+            50% { opacity: 0.7; transform: translate(-50%, -50%) scaleX(1.5); }
         }
 
         /* Sparkles */
         .sparkle {
             position: fixed;
-            width: 4px; height: 4px;
+            width: 6px; height: 6px;
             background: white;
             border-radius: 50%;
-            box-shadow: 0 0 10px white, 0 0 20px #ffcc88;
+            box-shadow: 0 0 15px white, 0 0 30px #ffcc88;
             z-index: 3;
             pointer-events: none;
         }
@@ -116,12 +123,13 @@
         }
         
         .section { 
-            height: 100vh;
+            min-height: 100vh;
             display: flex; 
             align-items: center; 
             justify-content: center; 
             text-align: center; 
-            padding: 0 5vw;
+            padding: 10vh 5vw;
+            position: relative;
         }
 
         .text-overlay { 
@@ -153,14 +161,255 @@
             letter-spacing: 0.2em;
         }
         
+        h3 {
+            font-size: clamp(1rem, 1.5vw, 1.5rem);
+            font-weight: 500;
+            letter-spacing: 0.1em;
+        }
+        
         p { 
             font-size: clamp(0.9rem, 1.1vw, 1.3rem); 
-            font-weight: 500; 
-            max-width: 550px; 
+            font-weight: 400; 
+            max-width: 600px; 
             margin: 20px auto; 
-            line-height: 1.7; 
-            letter-spacing: 0.08em;
+            line-height: 1.8; 
+            letter-spacing: 0.05em;
             color: #ffeecc;
+        }
+
+        /* Stats Section */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 60px;
+            margin-top: 60px;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: clamp(3rem, 6vw, 5rem);
+            font-weight: 800;
+            color: #f06a5a;
+            line-height: 1;
+            text-shadow: 0 0 40px rgba(240, 106, 90, 0.5);
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            letter-spacing: 0.2em;
+            margin-top: 10px;
+            color: rgba(255,255,255,0.7);
+        }
+
+        /* Image Gallery */
+        .gallery-section {
+            padding: 15vh 5vw;
+        }
+        
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            max-width: 1200px;
+            margin: 60px auto 0;
+        }
+        
+        .gallery-item {
+            aspect-ratio: 4/5;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            cursor: pointer;
+        }
+        
+        .gallery-item:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.4), 0 0 40px rgba(255,200,150,0.2);
+            border-color: rgba(255,255,255,0.4);
+        }
+        
+        .gallery-item::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, transparent 50%, rgba(0,0,0,0.8) 100%);
+            z-index: 1;
+        }
+        
+        .gallery-content {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 20px;
+            z-index: 2;
+            text-align: left;
+        }
+        
+        .gallery-content h4 {
+            font-size: 0.9rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            margin-bottom: 5px;
+        }
+        
+        .gallery-content p {
+            font-size: 0.75rem;
+            margin: 0;
+            opacity: 0.8;
+        }
+
+        /* Testimonials */
+        .testimonials-section {
+            padding: 15vh 5vw;
+        }
+        
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+            max-width: 1100px;
+            margin: 60px auto 0;
+        }
+        
+        .testimonial-card {
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 40px 30px;
+            text-align: left;
+            transition: all 0.4s;
+        }
+        
+        .testimonial-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255,255,255,0.08);
+            border-color: rgba(255,255,255,0.2);
+        }
+        
+        .quote {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            font-style: italic;
+            margin-bottom: 25px;
+            color: #fff;
+        }
+        
+        .author {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .author-avatar {
+            width: 50px; height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #f06a5a, #c94a6a);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 1.2rem;
+        }
+        
+        .author-info h4 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 3px;
+        }
+        
+        .author-info p {
+            font-size: 0.8rem;
+            margin: 0;
+            opacity: 0.6;
+        }
+
+        /* Logos */
+        .logos-section {
+            padding: 10vh 5vw;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .logos-grid {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 80px;
+            flex-wrap: wrap;
+            margin-top: 40px;
+            opacity: 0.6;
+        }
+        
+        .logo-item {
+            font-size: 1.2rem;
+            font-weight: 300;
+            letter-spacing: 0.3em;
+            color: rgba(255,255,255,0.5);
+        }
+
+        /* Video placeholder section */
+        .video-section {
+            padding: 15vh 5vw;
+            position: relative;
+        }
+        
+        .video-container {
+            max-width: 900px;
+            margin: 60px auto 0;
+            aspect-ratio: 16/9;
+            background: linear-gradient(135deg, rgba(0,0,0,0.4), rgba(0,0,0,0.2));
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .video-container::before {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            background: linear-gradient(45deg, #f06a5a, #c94a6a, #7d2a6a);
+            border-radius: 18px;
+            z-index: -1;
+            opacity: 0.5;
+        }
+        
+        .play-button {
+            width: 100px; height: 100px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        .play-button:hover {
+            transform: scale(1.1);
+            background: white;
+            box-shadow: 0 30px 80px rgba(0,0,0,0.4);
+        }
+        
+        .play-button::after {
+            content: '';
+            width: 0; height: 0;
+            border-left: 25px solid #1a0a35;
+            border-top: 15px solid transparent;
+            border-bottom: 15px solid transparent;
+            margin-left: 8px;
         }
 
         .glass-panel { 
@@ -249,6 +498,12 @@
             40% { transform: translateY(-10px) translateX(-50%); }
             60% { transform: translateY(-5px) translateX(-50%); }
         }
+
+        @media (max-width: 768px) {
+            .stats-grid, .testimonials-grid { grid-template-columns: 1fr; }
+            .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+            .logos-grid { gap: 40px; }
+        }
     </style>
 </head>
 <body>
@@ -260,6 +515,7 @@
     <div id="sparkles"></div>
 
     <main>
+        <!-- Hero -->
         <section class="section" id="s1">
             <div class="text-overlay visible">
                 <h1>THE BIG SCREEN<br>HACK</h1>
@@ -270,34 +526,148 @@
             </div>
         </section>
 
+        <!-- Stats -->
         <section class="section" id="s2">
             <div class="text-overlay" data-animate>
                 <h2>POWERED BY<br>VIDEOSTACK</h2>
                 <p>The world's first original storytelling production engine.<br>We remove the pain of prompting.</p>
+                
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-number" data-count="24">0</div>
+                        <div class="stat-label">HOURS</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" data-count="100">0</div>
+                        <div class="stat-label">HACKERS</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" data-count="1">0</div>
+                        <div class="stat-label">CANNES PREMIERE</div>
+                    </div>
+                </div>
             </div>
         </section>
 
-        <section class="section" id="s3">
+        <!-- Video Section -->
+        <section class="section video-section" id="s3">
             <div class="text-overlay" data-animate>
                 <h2>FROM THE BFI<br>PREMIERE</h2>
-                <p>Where outlier ideas shattered the noise<br>and claimed the big screen.</p>
+                <p>Watch the magic unfold as creators transform ideas into cinema.</p>
+                
+                <div class="video-container">
+                    <div class="play-button"></div>
+                </div>
             </div>
         </section>
 
-        <section class="section" id="s4">
+        <!-- Gallery -->
+        <section class="section gallery-section" id="s4">
+            <div class="text-overlay" data-animate>
+                <h2>THE MOMENTS</h2>
+                <p>Captured from the chaos of creation.</p>
+                
+                <div class="gallery-grid">
+                    <div class="gallery-item">
+                        <div class="gallery-content">
+                            <h4>THE PITCH</h4>
+                            <p>Midnight ideas take shape</p>
+                        </div>
+                    </div>
+                    <div class="gallery-item">
+                        <div class="gallery-content">
+                            <h4>THE BUILD</h4>
+                            <p>24 hours of pure flow</p>
+                        </div>
+                    </div>
+                    <div class="gallery-item">
+                        <div class="gallery-content">
+                            <h4>THE SCREENING</h4>
+                            <p>Big screen debut</p>
+                        </div>
+                    </div>
+                    <div class="gallery-item">
+                        <div class="gallery-content">
+                            <h4>THE WINNERS</h4>
+                            <p>Cannes-bound creators</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonials -->
+        <section class="section testimonials-section" id="s5">
+            <div class="text-overlay" data-animate>
+                <h2>THE VOICES</h2>
+                <p>From those who lived the hack.</p>
+                
+                <div class="testimonials-grid">
+                    <div class="testimonial-card">
+                        <p class="quote">"24 hours changed everything. We went from strangers to a Cannes-bound crew. VideoStack didn't just give us tools—it gave us wings."</p>
+                        <div class="author">
+                            <div class="author-avatar">S</div>
+                            <div class="author-info">
+                                <h4>Sarah Chen</h4>
+                                <p>Director, BFI Winner 2025</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="testimonial-card">
+                        <p class="quote">"The most intense creative experience of my life. No prompts, no templates—just pure storytelling at the speed of thought."</p>
+                        <div class="author">
+                            <div class="author-avatar">M</div>
+                            <div class="author-info">
+                                <h4>Marcus Webb</h4>
+                                <p>Screenwriter, Cannes Edition</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="testimonial-card">
+                        <p class="quote">"I've been to dozens of hackathons. Nothing compares to seeing your film on the big screen 24 hours after the first idea."</p>
+                        <div class="author">
+                            <div class="author-avatar">A</div>
+                            <div class="author-info">
+                                <h4>Aisha Patel</h4>
+                                <p>Producer, VideoStack Ambassador</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Logos -->
+        <section class="section logos-section" id="s6">
+            <div class="text-overlay" data-animate>
+                <h3>TRUSTED BY INDUSTRY LEADERS</h3>
+                <div class="logos-grid">
+                    <div class="logo-item">BFI</div>
+                    <div class="logo-item">CANNES</div>
+                    <div class="logo-item">BAFTA</div>
+                    <div class="logo-item">NFTS</div>
+                    <div class="logo-item">A24</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Cannes CTA -->
+        <section class="section" id="s7">
             <div class="text-overlay" data-animate>
                 <h1 style="color: #ffddbb;">TO THE CANNES<br>EDITION</h1>
                 <p>Hack your way to the ultimate stage in 24 hours.<br>No scrolling past. Total cinematic immersion.</p>
             </div>
         </section>
 
-        <section class="section" id="s5">
+        <!-- Form -->
+        <section class="section" id="s8">
             <div class="glass-panel text-overlay" data-animate style="pointer-events: auto;">
                 <h2 style="font-size: 1.5rem; margin-bottom: 8px;">ENTER THE OVERRIDE</h2>
                 <p style="font-size: 0.8rem; margin-bottom: 35px; opacity: 0.8;">Secure your position for the Cannes Edition.</p>
                 <form onsubmit="event.preventDefault(); alert('Registration captured!');">
                     <input type="text" placeholder="IDENTIFICATION (NAME)" required>
                     <input type="email" placeholder="COMMS_LINK (EMAIL)" required>
+                    <input type="text" placeholder="YOUR ROLE (DIRECTOR/WRITER/ETC)" required>
                     <button type="submit">INITIATE HACK</button>
                 </form>
             </div>
@@ -314,7 +684,6 @@
             const screen = document.createElement('div');
             screen.className = 'screen';
             
-            // Random starting positions scattered around
             const startX = (Math.random() - 0.5) * 150;
             const startY = (Math.random() - 0.5) * 150;
             const startZ = Math.random() * 500 - 200;
@@ -323,10 +692,9 @@
             
             screen.style.left = '50%';
             screen.style.top = '50%';
-            screen.style.marginLeft = '-60px';
-            screen.style.marginTop = '-40px';
+            screen.style.marginLeft = '-70px';
+            screen.style.marginTop = '-45px';
             
-            // Target position - cylindrical arrangement
             const angle = (i / (numScreens/3)) * Math.PI * 2;
             const radius = 40;
             const level = i % 3;
@@ -345,7 +713,7 @@
 
         // Create sparkles
         const sparklesContainer = document.getElementById('sparkles');
-        for(let i = 0; i < 30; i++) {
+        for(let i = 0; i < 40; i++) {
             const sparkle = document.createElement('div');
             sparkle.className = 'sparkle';
             sparkle.style.left = Math.random() * 100 + 'vw';
@@ -353,7 +721,6 @@
             sparkle.style.animationDelay = Math.random() * 3 + 's';
             sparklesContainer.appendChild(sparkle);
             
-            // Animate sparkles floating up
             setInterval(() => {
                 let top = parseFloat(sparkle.style.top);
                 top -= 0.5;
@@ -373,20 +740,16 @@
             const progress = Math.min(scrollY / maxScroll, 1);
             
             screens.forEach((s, i) => {
-                // Interpolate position based on scroll
                 const x = s.startX + (s.targetX - s.startX) * progress;
                 const y = s.startY + (s.targetY - s.startY) * progress;
                 const z = s.startZ + (s.targetZ - s.startZ) * progress;
-                
-                // Rotate as they assemble
                 const rotY = s.startRotY + progress * 360;
-                const rotX = 45 + progress * 45; // Tilt more as they come together
+                const rotX = 45 + progress * 45;
                 
                 s.el.style.transform = `translate3d(${x}vw, ${y}vh, ${z}px) rotateX(${rotX}deg) rotateY(${rotY}deg)`;
                 s.el.style.opacity = 0.3 + progress * 0.7;
             });
             
-            // Show beam in middle of scroll
             if(progress > 0.3 && progress < 0.8) {
                 beam.classList.add('active');
             } else {
@@ -399,15 +762,36 @@
             entries.forEach(entry => {
                 if(entry.isIntersecting) {
                     entry.target.classList.add('visible');
+                    
+                    // Animate counters if stats section
+                    const statNumbers = entry.target.querySelectorAll('.stat-number');
+                    statNumbers.forEach(stat => {
+                        const target = parseInt(stat.dataset.count);
+                        animateCounter(stat, target);
+                    });
                 }
             });
         }, { threshold: 0.3 });
 
         textOverlays.forEach(el => observer.observe(el));
 
-        // Update on scroll
+        // Counter animation
+        function animateCounter(el, target) {
+            let current = 0;
+            const increment = target / 50;
+            const timer = setInterval(() => {
+                current += increment;
+                if(current >= target) {
+                    el.textContent = target === 100 ? '100+' : target;
+                    clearInterval(timer);
+                } else {
+                    el.textContent = Math.floor(current);
+                }
+            }, 30);
+        }
+
         window.addEventListener('scroll', updateScreens);
-        updateScreens(); // Initial position
+        updateScreens();
     </script>
 </body>
 </html>

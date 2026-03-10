@@ -771,27 +771,27 @@
     <!-- Parallax layers -->
     <div class="parallax-layer" id="parallax-deep">
         <div class="floating-frame frame-1" data-speed="0.8" data-dir="1">
-            <img class="frame-video" src="https://media.giphy.com/media/l4pSXrXn83P1656xW/giphy.gif" alt="abstract glowy animation" />
+            <img class="frame-video" src="https://images.unsplash.com/photo-1485846234645-a62644f84728?q=80&w=600&auto=format&fit=crop" alt="Cinema" />
             <div class="video-haze-overlay"></div>
         </div>
         <div class="floating-frame frame-2" data-speed="1.2" data-dir="1">
-            <img class="frame-video" src="https://media.giphy.com/media/l4pSXrXn83P1656xW/giphy.gif" alt="abstract glowy animation" />
+            <video class="frame-video" src="https://www.w3schools.com/html/mov_bbb.mp4" autoplay loop muted playsinline></video>
             <div class="video-haze-overlay"></div>
         </div>
     </div>
     <div class="parallax-layer" id="parallax-mid">
         <div class="floating-frame frame-3" data-speed="1.5" data-dir="-1">
-            <img class="frame-video" src="https://media.giphy.com/media/l4pSXrXn83P1656xW/giphy.gif" alt="abstract glowy animation" />
+            <img class="frame-video" src="https://media.giphy.com/media/26tn33aiTi1jIGn5e/giphy.gif" alt="Pitch" />
             <div class="video-haze-overlay"></div>
         </div>
         <div class="floating-frame frame-4" data-speed="0.9" data-dir="-1">
-            <img class="frame-video" src="https://media.giphy.com/media/l4pSXrXn83P1656xW/giphy.gif" alt="abstract glowy animation" />
+            <img class="frame-video" src="https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?q=80&w=600&auto=format&fit=crop" alt="Clapperboard" />
             <div class="video-haze-overlay"></div>
         </div>
     </div>
     <div class="parallax-layer" id="parallax-front">
         <div class="floating-frame frame-5" data-speed="2.2" data-dir="1">
-            <img class="frame-video" src="https://media.giphy.com/media/l4pSXrXn83P1656xW/giphy.gif" alt="abstract glowy animation" />
+            <img class="frame-video" src="https://media.giphy.com/media/l0HlHFRbmaZtBRhXG/giphy.gif" alt="Win" />
             <div class="video-haze-overlay"></div>
         </div>
     </div>
@@ -1009,17 +1009,29 @@
         for(let i = 0; i < numScreens; i++) {
             const screen = document.createElement('div');
             screen.className = 'screen';
-            // Use different placeholder gifs for variety
-            const gifs = [
+            // Use a diverse mix of images, gifs, and videos
+            const mediaSources = [
+                'https://images.unsplash.com/photo-1485846234645-a62644f84728?q=80&w=600&auto=format&fit=crop',
                 'https://media.giphy.com/media/xT9IgzoKnwFNmISR8I/giphy.gif',
+                'https://www.w3schools.com/html/mov_bbb.mp4',
+                'https://images.unsplash.com/photo-1536440136628-849c177e76a1?q=80&w=600&auto=format&fit=crop',
                 'https://media.giphy.com/media/26tn33aiTi1jIGn5e/giphy.gif',
+                'https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?q=80&w=600&auto=format&fit=crop',
                 'https://media.giphy.com/media/3o7TKsQ8gE0bJkE1RS/giphy.gif',
+                'https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?q=80&w=600&auto=format&fit=crop',
                 'https://media.giphy.com/media/l0HlHFRbmaZtBRhXG/giphy.gif'
             ];
-            const gifUrl = gifs[i % gifs.length];
+            const src = mediaSources[i % mediaSources.length];
+            
+            let mediaTag = '';
+            if (src.endsWith('.mp4')) {
+                mediaTag = `<video class="screen-video" src="${src}" autoplay loop muted playsinline></video>`;
+            } else {
+                mediaTag = `<img class="screen-video" src="${src}" alt="Cinema screen content" />`;
+            }
             
             screen.innerHTML = `
-                <img class="screen-video" src="${gifUrl}" alt="Cinema screen content" />
+                ${mediaTag}
                 <div class="video-haze-overlay"></div>
             `;
             

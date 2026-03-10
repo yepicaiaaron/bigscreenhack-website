@@ -550,6 +550,110 @@
             margin-left: 10px;
         }
 
+        /* Video Slider Section */
+        .slider-section {
+            flex-direction: column;
+            padding: 15vh 0; /* Remove side padding for full bleed */
+            overflow: hidden;
+        }
+
+        .video-slider-container {
+            width: 100vw;
+            overflow-x: auto;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+            padding: 20px 5vw 60px 5vw; /* Padding for shadow overflow */
+            scrollbar-width: none; /* Firefox */
+        }
+        
+        .video-slider-container::-webkit-scrollbar {
+            display: none; /* Chrome/Safari */
+        }
+
+        .video-slider-track {
+            display: flex;
+            gap: 30px;
+            width: max-content;
+            /* Initial slight transform to hint at scroll */
+            transform: translateX(5vw); 
+        }
+
+        .slider-item {
+            width: 400px;
+            aspect-ratio: 16/9;
+            flex-shrink: 0;
+            border-radius: 20px;
+            overflow: hidden;
+            position: relative;
+            background: rgba(20, 5, 15, 0.6);
+            border: 1px solid rgba(255,255,255,0.15);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            cursor: pointer;
+        }
+
+        .slider-item:hover {
+            transform: translateY(-10px) scale(1.02);
+            border-color: rgba(255,255,255,0.4);
+            box-shadow: 0 40px 80px rgba(240, 106, 90, 0.3);
+            z-index: 10;
+        }
+
+        .slider-video-bg {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            object-fit: cover;
+            opacity: 0.7;
+            transition: opacity 0.4s, transform 4s linear;
+        }
+
+        .slider-item:hover .slider-video-bg {
+            opacity: 1;
+            transform: scale(1.05);
+        }
+
+        .slider-content {
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            padding: 30px;
+            background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, transparent 100%);
+            z-index: 2;
+            text-align: left;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .slider-content h4 {
+            font-size: 1.2rem;
+            color: white;
+            margin-bottom: 5px;
+            letter-spacing: 0.1em;
+        }
+
+        .slider-content p {
+            font-size: 0.9rem;
+            margin: 0;
+            color: #ffccaa;
+            opacity: 0.8;
+        }
+
+        .small-play {
+            width: 50px; height: 50px;
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%) scale(0.8);
+            opacity: 0;
+        }
+
+        .slider-item:hover .small-play {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        /* End Video Slider */
+
         .glass-panel { 
             background: rgba(20, 5, 15, 0.4); 
             backdrop-filter: blur(30px); 
@@ -731,14 +835,51 @@
             </div>
         </section>
 
-        <!-- Video Section -->
-        <section class="section video-section" id="s3">
-            <div class="text-overlay" data-animate>
-                <h2>FROM THE BFI<br>PREMIERE</h2>
-                <p>Watch the magic unfold as creators transform ideas into cinema.</p>
-                
-                <div class="video-container">
-                    <div class="play-button"></div>
+        <!-- Heart Middle Bit: Video Slider -->
+        <section class="section slider-section" id="s3">
+            <div class="text-overlay" data-animate style="margin-bottom: 40px;">
+                <h2>THE CREATIVE HEART</h2>
+                <p>Explore the raw, unfiltered stories from the hackathon floor.</p>
+            </div>
+            
+            <div class="video-slider-container">
+                <div class="video-slider-track">
+                    <!-- Slider Item 1 -->
+                    <div class="slider-item">
+                        <img src="https://media.giphy.com/media/xT9IgzoKnwFNmISR8I/giphy.gif" alt="Coding session" class="slider-video-bg">
+                        <div class="slider-content">
+                            <h4>THE PROTOTYPE</h4>
+                            <p>Building the engine</p>
+                            <div class="play-button small-play"></div>
+                        </div>
+                    </div>
+                    <!-- Slider Item 2 -->
+                    <div class="slider-item">
+                        <img src="https://media.giphy.com/media/26tn33aiTi1jIGn5e/giphy.gif" alt="Pitching" class="slider-video-bg">
+                        <div class="slider-content">
+                            <h4>THE PITCH</h4>
+                            <p>Selling the vision</p>
+                            <div class="play-button small-play"></div>
+                        </div>
+                    </div>
+                    <!-- Slider Item 3 -->
+                    <div class="slider-item">
+                        <img src="https://media.giphy.com/media/3o7TKsQ8gE0bJkE1RS/giphy.gif" alt="Screening" class="slider-video-bg">
+                        <div class="slider-content">
+                            <h4>THE SCREENING</h4>
+                            <p>First look</p>
+                            <div class="play-button small-play"></div>
+                        </div>
+                    </div>
+                    <!-- Slider Item 4 -->
+                    <div class="slider-item">
+                        <img src="https://media.giphy.com/media/l0HlHFRbmaZtBRhXG/giphy.gif" alt="Celebration" class="slider-video-bg">
+                        <div class="slider-content">
+                            <h4>THE WIN</h4>
+                            <p>To Cannes</p>
+                            <div class="play-button small-play"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -868,8 +1009,17 @@
         for(let i = 0; i < numScreens; i++) {
             const screen = document.createElement('div');
             screen.className = 'screen';
+            // Use different placeholder gifs for variety
+            const gifs = [
+                'https://media.giphy.com/media/xT9IgzoKnwFNmISR8I/giphy.gif',
+                'https://media.giphy.com/media/26tn33aiTi1jIGn5e/giphy.gif',
+                'https://media.giphy.com/media/3o7TKsQ8gE0bJkE1RS/giphy.gif',
+                'https://media.giphy.com/media/l0HlHFRbmaZtBRhXG/giphy.gif'
+            ];
+            const gifUrl = gifs[i % gifs.length];
+            
             screen.innerHTML = `
-                <img class="screen-video" src="https://media.giphy.com/media/l4pSXrXn83P1656xW/giphy.gif" alt="abstract glowy animation" />
+                <img class="screen-video" src="${gifUrl}" alt="Cinema screen content" />
                 <div class="video-haze-overlay"></div>
             `;
             
@@ -932,16 +1082,50 @@
             const maxScroll = document.body.scrollHeight - window.innerHeight;
             const progress = Math.min(scrollY / maxScroll, 1);
             
-            // 1. Move Central Screens
+            // 1. Move Central Screens - Assembly Logic
             screens.forEach((s, i) => {
-                const x = s.startX + (s.targetX - s.startX) * progress;
-                const y = s.startY + (s.targetY - s.startY) * progress;
-                const z = s.startZ + (s.targetZ - s.startZ) * progress;
-                const rotY = s.startRotY + progress * 360;
-                const rotX = 45 + progress * 45;
+                // Phase 1: Disperse into circular pattern (0 to 0.6 progress)
+                const phase1Progress = Math.min(progress / 0.6, 1);
                 
-                s.el.style.transform = `translate3d(${x}vw, ${y}vh, ${z}px) rotateX(${rotX}deg) rotateY(${rotY}deg)`;
-                s.el.style.opacity = 0.3 + progress * 0.7;
+                let currentX = s.startX + (s.targetX - s.startX) * phase1Progress;
+                let currentY = s.startY + (s.targetY - s.startY) * phase1Progress;
+                let currentZ = s.startZ + (s.targetZ - s.startZ) * phase1Progress;
+                let currentRotY = s.startRotY + phase1Progress * 360;
+                let currentRotX = 45 + phase1Progress * 45;
+                let currentOpacity = 0.3 + phase1Progress * 0.7;
+
+                // Phase 2: Assemble into Building Grid (0.6 to 1.0 progress)
+                if (progress > 0.6) {
+                    const phase2Progress = (progress - 0.6) / 0.4;
+                    // Easing for smooth snap into place
+                    const easeOutBack = 1 - Math.pow(1 - phase2Progress, 3);
+                    
+                    // Calculate Grid Position (6 columns x 5 rows for 30 screens)
+                    const cols = 6;
+                    const col = i % cols;
+                    const row = Math.floor(i / cols);
+                    
+                    // Target coordinates for the building facade (vw/vh units to keep it responsive)
+                    // Centered, tightly packed grid
+                    const buildingX = (col - (cols - 1) / 2) * 12; 
+                    const buildingY = (row - 2) * 15; 
+                    const buildingZ = 200; // Bring them forward
+                    
+                    // Interpolate from Phase 1 end position to Building position
+                    currentX = currentX + (buildingX - currentX) * easeOutBack;
+                    currentY = currentY + (buildingY - currentY) * easeOutBack;
+                    currentZ = currentZ + (buildingZ - currentZ) * easeOutBack;
+                    
+                    // Flatten rotations to face forward
+                    currentRotY = currentRotY + (0 - (currentRotY % 360)) * easeOutBack;
+                    currentRotX = currentRotX + (0 - currentRotX) * easeOutBack;
+                    
+                    // Increase opacity to max when assembled
+                    currentOpacity = currentOpacity + (1 - currentOpacity) * easeOutBack;
+                }
+                
+                s.el.style.transform = `translate3d(${currentX}vw, ${currentY}vh, ${currentZ}px) rotateX(${currentRotX}deg) rotateY(${currentRotY}deg)`;
+                s.el.style.opacity = currentOpacity;
             });
             
             // 2. Horizontal Frame Parallax

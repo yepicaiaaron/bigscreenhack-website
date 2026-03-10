@@ -56,7 +56,25 @@
             box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 0 40px rgba(255,200,150,0.2);
             border: 2px solid rgba(255,255,255,0.2);
             transition: transform 0.3s ease-out;
-            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+            background: transparent; /* Changed to transparent as video will provide background */
+        }
+
+        .floating-frame .frame-video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: blur(15px) brightness(1.5); /* Blur and brighten the video */
+            transform: scale(1.1); /* Slightly scale to avoid blur edges */
+        }
+
+        .floating-frame .video-haze-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255,180,100,0.3), rgba(255,100,50,0.3)); /* Glowy haze */
+            mix-blend-mode: overlay; /* Blend mode for glow effect */
+            pointer-events: none;
+            z-index: 2; /* Above the video */
+            filter: blur(20px); /* Further blur the haze itself */
         }
 
         .floating-frame::before {
@@ -629,15 +647,30 @@
     
     <!-- Parallax layers -->
     <div class="parallax-layer" id="parallax-deep">
-        <div class="floating-frame frame-1" data-speed="0.8" data-dir="1"></div>
-        <div class="floating-frame frame-2" data-speed="1.2" data-dir="1"></div>
+        <div class="floating-frame frame-1" data-speed="0.8" data-dir="1">
+            <video class="frame-video" src="https://www.w3schools.com/html/mov_bbb.mp4" autoplay loop muted playsinline></video>
+            <div class="video-haze-overlay"></div>
+        </div>
+        <div class="floating-frame frame-2" data-speed="1.2" data-dir="1">
+            <video class="frame-video" src="https://www.w3schools.com/html/mov_bbb.mp4" autoplay loop muted playsinline></video>
+            <div class="video-haze-overlay"></div>
+        </div>
     </div>
     <div class="parallax-layer" id="parallax-mid">
-        <div class="floating-frame frame-3" data-speed="1.5" data-dir="-1"></div>
-        <div class="floating-frame frame-4" data-speed="0.9" data-dir="-1"></div>
+        <div class="floating-frame frame-3" data-speed="1.5" data-dir="-1">
+            <video class="frame-video" src="https://www.w3schools.com/html/mov_bbb.mp4" autoplay loop muted playsinline></video>
+            <div class="video-haze-overlay"></div>
+        </div>
+        <div class="floating-frame frame-4" data-speed="0.9" data-dir="-1">
+            <video class="frame-video" src="https://www.w3schools.com/html/mov_bbb.mp4" autoplay loop muted playsinline></video>
+            <div class="video-haze-overlay"></div>
+        </div>
     </div>
     <div class="parallax-layer" id="parallax-front">
-        <div class="floating-frame frame-5" data-speed="2.2" data-dir="1"></div>
+        <div class="floating-frame frame-5" data-speed="2.2" data-dir="1">
+            <video class="frame-video" src="https://www.w3schools.com/html/mov_bbb.mp4" autoplay loop muted playsinline></video>
+            <div class="video-haze-overlay"></div>
+        </div>
     </div>
     
     <div class="screens-container" id="screens"></div>

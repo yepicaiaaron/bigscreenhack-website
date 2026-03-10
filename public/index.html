@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BIG SCREEN HACK — CANNES</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Grotesk:wght@300;700&family=Syne:wght@400;700;800&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --void: #050505;
+            --acid: #CCFF00;
+            --blood: #FF0040;
+            --cyan: #00FFFF;
+            --amber: #FFAA00;
+            --magenta: #FF00CC;
+            --bone: #F0F0F0;
+            --ash: #2A2A2A;
+            --smoke: #1A1A1A;
+        }
+
+        html {
+            overflow-x: hidden;
+            scroll-behavior: auto;
+        }
+
+        body {
+            font-family: 'Syne', sans-serif;
+            background: var(--void);
+            color: var(--bone);
+            overflow-x: hidden;
+            cursor: none;
+        }
+
+        /* Custom Cursor */
+        .cursor {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--acid);
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            mix-blend-mode: difference;
+            transition: transform 0.1s;
+        }
+
+        .cursor-follower {
+            width: 40px;
+            height: 40px;
+            background: rgba(204, 255, 0, 0.1);
+            position: fixed;
+            pointer-events: none;
+            z-index: 9998;
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+        }
+
+        body:hover .cursor {
+            transform: scale(1.5);
+        }
+
+        /* Noise Overlay */
+        .noise {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9990;
+            opacity: 0.05;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        /* Sections */
+        .section {
+            min-height: 100vh;
+            width: 100%;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        /* SECTION 1: THE BREACH */
+        #breach {
+            background: var(--void);
+        }
+
+        .breach-container {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .breach-text {
+            font-family: 'Archivo Black', sans-serif;
+            font-size: clamp(4rem, 20vw, 15rem);
+            line-height: 0.85;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        .breach-line {
+            display: block;
+            position: relative;
+        }
+
+        .breach-line:nth-child(1) {
+            color: transparent;
+            -webkit-text-stroke: 2px var(--acid);
+            transform: translateX(-5%);
+        }
+
+        .breach-line:nth-child(2) {
+            color: var(--blood);
+            mix-blend-mode: screen;
+        }
+
+        .breach-line:nth-child(3) {
+            color: transparent;
+            -webkit-text-stroke: 2px var(--cyan);
+            transform: translateX(5%);
+        }
+
+        .breach-sub {
+            position: absolute;
+            bottom: 10%;
+            left: 50%;
+            transform: translateX(-50%);
+            font-family: 'Space Grotesk', monospace;
+            font-size: 0.9rem;
+            letter-spacing: 0.5em;
+            color: var(--ash);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        .glitch-fragments {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .fragment {
+            position: absolute;
+            background: var(--acid);
+            opacity: 0.8;
+        }
+
+        /* SECTION 2: THE RITUAL */
+        #ritual {
+            background: linear-gradient(180deg, var(--void) 0%, var(--smoke) 100%);
+        }
+
+        .ritual-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+            width: 100%;
+            min-height: 100vh;
+        }
+
+        .ritual-panel {
+            padding: 60px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+        }
+
+        .ritual-panel:first-child {
+            background: var(--blood);
+            color: var(--bone);
+        }
+
+        .ritual-panel:last-child {
+            background: var(--void);
+            border-left: 1px solid var(--ash);
+        }
+
+        .ritual-number {
+            font-family: 'Archivo Black', sans-serif;
+            font-size: clamp(8rem, 25vw, 20rem);
+            line-height: 0.8;
+            opacity: 0.2;
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+
+        .ritual-title {
+            font-size: clamp(2rem, 5vw, 4rem);
+            font-weight: 800;
+            margin-bottom: 30px;
+            line-height: 1.1;
+        }
+
+        .ritual-body {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            max-width: 400px;
+        }
+
+        /* SECTION 3: THE ALTAR */
+        #altar {
+            background: var(--void);
+            perspective: 1000px;
+        }
+
+        .altar-scene {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transform-style: preserve-3d;
+        }
+
+        .altar-ring {
+            position: absolute;
+            border: 1px solid var(--ash);
+            border-radius: 50%;
+            animation: rotate 20s linear infinite;
+        }
+
+        .altar-ring:nth-child(1) { width: 300px; height: 300px; }
+        .altar-ring:nth-child(2) { width: 500px; height: 500px; animation-duration: 30s; animation-direction: reverse; }
+        .altar-ring:nth-child(3) { width: 700px; height: 700px; animation-duration: 40s; }
+        .altar-ring:nth-child(4) { width: 900px; height: 900px; animation-duration: 50s; animation-direction: reverse; }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .altar-core {
+            text-align: center;
+            z-index: 10;
+        }
+
+        .altar-word {
+            font-family: 'Archivo Black', sans-serif;
+            font-size: clamp(3rem, 10vw, 8rem);
+            display: block;
+            line-height: 0.9;
+        }
+
+        .altar-word:nth-child(1) { color: var(--acid); }
+        .altar-word:nth-child(2) { color: var(--blood); transform: translateX(20px); }
+        .altar-word:nth-child(3) { color: var(--cyan); transform: translateX(-20px); }
+
+        /* SECTION 4: THE OFFERING */
+        #offering {
+            background: var(--smoke);
+            overflow: visible;
+        }
+
+        .offering-track {
+            display: flex;
+            gap: 60px;
+            padding: 0 60px;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .offering-track::-webkit-scrollbar {
+            display: none;
+        }
+
+        .offering-card {
+            flex: 0 0 400px;
+            height: 70vh;
+            background: var(--void);
+            border: 1px solid var(--ash);
+            scroll-snap-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 40px;
+            transition: all 0.5s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .offering-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--acid), var(--blood));
+            transform: scaleX(0);
+            transition: transform 0.5s;
+        }
+
+        .offering-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .offering-card:hover {
+            border-color: var(--acid);
+            transform: translateY(-10px);
+        }
+
+        .offering-icon {
+            font-size: 4rem;
+            filter: grayscale(100%);
+            transition: filter 0.3s;
+        }
+
+        .offering-card:hover .offering-icon {
+            filter: grayscale(0%);
+        }
+
+        .offering-title {
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .offering-desc {
+            color: var(--ash);
+            line-height: 1.5;
+        }
+
+        /* SECTION 5: THE ASCENSION */
+        #ascension {
+            background: var(--void);
+            position: relative;
+        }
+
+        .ascension-container {
+            width: 100%;
+            height: 100vh;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ascension-layer {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .ascension-text {
+            font-family: 'Archivo Black', sans-serif;
+            font-size: clamp(5rem, 15vw, 12rem);
+            text-align: center;
+            line-height: 0.9;
+        }
+
+        .ascension-text.outline {
+            color: transparent;
+            -webkit-text-stroke: 1px var(--ash);
+        }
+
+        .ascension-text.fill {
+            color: var(--acid);
+            mix-blend-mode: difference;
+        }
+
+        .ascension-text.shadow {
+            color: var(--blood);
+            opacity: 0.5;
+        }
+
+        /* SECTION 6: THE TEMPLE */
+        #temple {
+            background: linear-gradient(135deg, var(--void) 0%, #0A0A0A 50%, var(--void) 100%);
+        }
+
+        .temple-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2px;
+            width: 100%;
+            max-width: 1200px;
+            padding: 40px;
+        }
+
+        .temple-cell {
+            aspect-ratio: 1;
+            background: var(--smoke);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: clamp(1rem, 3vw, 2rem);
+            font-weight: 700;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .temple-cell:hover {
+            background: var(--acid);
+            color: var(--void);
+        }
+
+        .temple-cell:nth-child(odd) {
+            background: var(--ash);
+        }
+
+        .temple-cell:nth-child(odd):hover {
+            background: var(--blood);
+            color: var(--bone);
+        }
+
+        /* SECTION 7: THE GATE */
+        #gate {
+            background: var(--void);
+            min-height: 100vh;
+        }
+
+        .gate-container {
+            width: 100%;
+            max-width: 600px;
+            padding: 40px;
+        }
+
+        .gate-title {
+            font-family: 'Archivo Black', sans-serif;
+            font-size: clamp(2rem, 6vw, 4rem);
+            margin-bottom: 60px;
+            text-align: center;
+        }
+
+        .gate-form {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .gate-field {
+            position: relative;
+        }
+
+        .gate-field input {
+            width: 100%;
+            padding: 20px;
+            background: transparent;
+            border: none;
+            border-bottom: 2px solid var(--ash);
+            color: var(--bone);
+            font-family: 'Syne', sans-serif;
+            font-size: 1.2rem;
+            transition: all 0.3s;
+        }
+
+        .gate-field input:focus {
+            outline: none;
+            border-color: var(--acid);
+        }
+
+        .gate-field label {
+            position: absolute;
+            left: 20px;
+            top: 20px;
+            color: var(--ash);
+            pointer-events: none;
+            transition: all 0.3s;
+        }
+
+        .gate-field input:focus + label,
+        .gate-field input:not(:placeholder-shown) + label {
+            top: -10px;
+            font-size: 0.8rem;
+            color: var(--acid);
+        }
+
+        .gate-submit {
+            padding: 25px;
+            background: transparent;
+            border: 2px solid var(--acid);
+            color: var(--acid);
+            font-family: 'Archivo Black', sans-serif;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 20px;
+        }
+
+        .gate-submit:hover {
+            background: var(--acid);
+            color: var(--void);
+        }
+
+        /* Navigation */
+        .nav-indicator {
+            position: fixed;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 20px;
+            z-index: 100;
+        }
+
+        .nav-line {
+            width: 60px;
+            height: 2px;
+            background: var(--ash);
+            transition: all 0.3s;
+        }
+
+        .nav-line.active {
+            background: var(--acid);
+            width: 100px;
+        }
+
+        /* Scroll Hint */
+        .scroll-hint {
+            position: fixed;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-family: 'Space Grotesk', monospace;
+            font-size: 0.7rem;
+            letter-spacing: 0.3em;
+            color: var(--ash);
+            animation: bounce 2s infinite;
+            z-index: 100;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(-10px); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .ritual-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .temple-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .offering-card {
+                flex: 0 0 300px;
+            }
+            
+            .cursor, .cursor-follower {
+                display: none;
+            }
+            
+            body {
+                cursor: auto;
+            }
+        }
+
+        /* Animations */
+        .reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .reveal-left {
+            opacity: 0;
+            transform: translateX(-100px);
+            transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .reveal-left.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .reveal-scale {
+            opacity: 0;
+            transform: scale(0.8);
+            transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .reveal-scale.active {
+            opacity: 1;
+            transform: scale(1);
+        }
+    </style>
+</head>
+<body>
+    <!-- Custom Cursor -->
+    <div class="cursor"></div>
+    <div class="cursor-follower"></div>
+    
+    <!-- Noise Overlay -->
+    <div class="noise"></div>
+
+    <!-- SECTION 1: THE BREACH -->
+    <section id="breach" class="section">
+        <div class="glitch-fragments" id="fragments"></div>
+        <div class="breach-container">
+            <h1 class="breach-text">
+                <span class="breach-line">BIG</span>
+                <span class="breach-line">SCREEN</span>
+                <span class="breach-line">HACK</span>
+            </h1>
+        </div>
+        <div class="breach-sub">SCROLL TO ENTER</div>
+    </section>
+
+    <!-- SECTION 2: THE RITUAL -->
+    <section id="ritual" class="section">
+        <div class="ritual-grid">
+            <div class="ritual-panel">
+                <span class="ritual-number">24</span>
+                <h2 class="ritual-title reveal-left">HOURS TO CREATE</h2>
+                <p class="ritual-body reveal">One day. One film. No limits. The Big Screen Hack is a creative marathon where filmmakers, developers, and artists converge to birth cinema from chaos.</p>
+            </div>
+            <div class="ritual-panel">
+                <span class="ritual-number">01</span>
+                <h2 class="ritual-title reveal-left">CANNES AWAITS</h2>
+                <p class="ritual-body reveal">The ultimate stage. The most prestigious festival in the world. Your film, premiered on the Croisette. This is not a drill.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 3: THE ALTAR -->
+    <section id="altar" class="section">
+        <div class="altar-scene">
+            <div class="altar-ring"></div>
+            <div class="altar-ring"></div>
+            <div class="altar-ring"></div>
+            <div class="altar-ring"></div>
+            <div class="altar-core">
+                <span class="altar-word reveal-scale">NO</span>
+                <span class="altar-word reveal-scale">PROMPTS</span>
+                <span class="altar-word reveal-scale">PURE STORY</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 4: THE OFFERING -->
+    <section id="offering" class="section">
+        <div class="offering-track">
+            <div class="offering-card reveal">
+                <div class="offering-icon">⚡</div>
+                <h3 class="offering-title">VIDEOSTACK</h3>
+                <p class="offering-desc">AI that understands narrative, not just keywords. Tell your story, we'll handle the tech.</p>
+            </div>
+            <div class="offering-card reveal">
+                <div class="offering-icon">🔥</div>
+                <h3 class="offering-title">RAPID FIRE</h3>
+                <p class="offering-desc">From concept to screen in 24 hours. Iteration at the speed of thought.</p>
+            </div>
+            <div class="offering-card reveal">
+                <div class="offering-icon">👁️</div>
+                <h3 class="offering-title">VISION FIRST</h3>
+                <p class="offering-desc">Tools that amplify creativity, not replace it. Your voice, enhanced.</p>
+            </div>
+            <div class="offering-card reveal">
+                <div class="offering-icon">🌐</div>
+                <h3 class="offering-title">GLOBAL STAGE</h3>
+                <p class="offering-desc">Cannes Film Festival premiere. The world is watching. Make it count.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 5: THE ASCENSION -->
+    <section id="ascension" class="section">
+        <div class="ascension-container">
+            <div class="ascension-layer">
+                <div class="ascension-text outline">HACK</div>
+            </div>
+            <div class="ascension-layer">
+                <div class="ascension-text fill reveal-scale">YOUR WAY</div>
+            </div>
+            <div class="ascension-layer">
+                <div class="ascension-text shadow">TO THE</div>
+            </div>
+            <div class="ascension-layer">
+                <div class="ascension-text fill reveal-scale" style="color: var(--blood);">BIG SCREEN</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 6: THE TEMPLE -->
+    <section id="temple" class="section">
+        <div class="temple-grid">
+            <div class="temple-cell">MAY</div>
+            <div class="temple-cell">2026</div>
+            <div class="temple-cell">CANNES</div>
+            <div class="temple-cell">24H</div>
+            <div class="temple-cell">HACK</div>
+            <div class="temple-cell">FILM</div>
+            <div class="temple-cell">PREMIERE</div>
+            <div class="temple-cell">GLORY</div>
+            <div class="temple-cell">JOIN</div>
+        </div>
+    </section>
+
+    <!-- SECTION 7: THE GATE -->
+    <section id="gate" class="section">
+        <div class="gate-container">
+            <h2 class="gate-title reveal">ENTER_THE_HACK</h2>
+            <form class="gate-form" onsubmit="return false;">
+                <div class="gate-field reveal">
+                    <input type="text" id="name" placeholder=" " required>
+                    <label for="name">YOUR NAME</label>
+                </div>
+                <div class="gate-field reveal">
+                    <input type="email" id="email" placeholder=" " required>
+                    <label for="email">YOUR EMAIL</label>
+                </div>
+                <div class="gate-field reveal">
+                    <input type="text" id="role" placeholder=" ">
+                    <label for="role">YOUR ROLE</label>
+                </div>
+                <button type="submit" class="gate-submit reveal">INITIATE_SEQUENCE</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Navigation -->
+    <div class="nav-indicator">
+        <div class="nav-line active"></div>
+        <div class="nav-line"></div>
+        <div class="nav-line"></div>
+        <div class="nav-line"></div>
+        <div class="nav-line"></div>
+        <div class="nav-line"></div>
+        <div class="nav-line"></div>
+    </div>
+
+    <div class="scroll-hint">SCROLL</div>
+
+    <script>
+        // Custom Cursor
+        const cursor = document.querySelector('.cursor');
+        const cursorFollower = document.querySelector('.cursor-follower');
+
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX - 10 + 'px';
+            cursor.style.top = e.clientY - 10 + 'px';
+            
+            setTimeout(() => {
+                cursorFollower.style.left = e.clientX - 20 + 'px';
+                cursorFollower.style.top = e.clientY - 20 + 'px';
+            }, 100);
+        });
+
+        // Generate Random Fragments
+        const fragmentsContainer = document.getElementById('fragments');
+        for (let i = 0; i < 20; i++) {
+            const fragment = document.createElement('div');
+            fragment.className = 'fragment';
+            fragment.style.width = Math.random() * 100 + 'px';
+            fragment.style.height = Math.random() * 10 + 'px';
+            fragment.style.left = Math.random() * 100 + '%';
+            fragment.style.top = Math.random() * 100 + '%';
+            fragment.style.transform = `rotate(${Math.random() * 360}deg)`;
+            fragment.style.animation = `pulse ${2 + Math.random() * 3}s infinite`;
+            fragmentsContainer.appendChild(fragment);
+        }
+
+        // Scroll Reveal
+        const revealElements = document.querySelectorAll('.reveal, .reveal-left, .reveal-scale');
+        
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        revealElements.forEach(el => revealObserver.observe(el));
+
+        // Navigation Update
+        const sections = document.querySelectorAll('.section');
+        const navLines = document.querySelectorAll('.nav-line');
+        const scrollHint = document.querySelector('.scroll-hint');
+
+        window.addEventListener('scroll', () => {
+            let current = 0;
+            sections.forEach((section, index) => {
+                const sectionTop = section.offsetTop;
+                if (scrollY >= sectionTop - window.innerHeight / 2) {
+                    current = index;
+                }
+            });
+
+            navLines.forEach((line, index) => {
+                if (index === current) {
+                    line.classList.add('active');
+                } else {
+                    line.classList.remove('active');
+                }
+            });
+
+            // Hide scroll hint after first section
+            if (current > 0) {
+                scrollHint.style.opacity = '0';
+            } else {
+                scrollHint.style.opacity = '1';
+            }
+        });
+
+        // Parallax Effect for Ascension
+        window.addEventListener('scroll', () => {
+            const ascension = document.getElementById('ascension');
+            const rect = ascension.getBoundingClientRect();
+            
+            if (rect.top < window.innerHeight && rect.bottom > 0) {
+                const layers = ascension.querySelectorAll('.ascension-layer');
+                const scrollProgress = (window.innerHeight - rect.top) / (window.innerHeight + rect.height);
+                
+                layers.forEach((layer, index) => {
+                    const speed = (index + 1) * 0.2;
+                    layer.style.transform = `translateY(${(scrollProgress - 0.5) * 100 * speed}px)`;
+                });
+            }
+        });
+
+        // Horizontal Scroll for Offering
+        const offeringTrack = document.querySelector('.offering-track');
+        let isDown = false;
+        let startX;
+        let scrollLeft;
+
+        offeringTrack.addEventListener('mousedown', (e) => {
+            isDown = true;
+            startX = e.pageX - offeringTrack.offsetLeft;
+            scrollLeft = offeringTrack.scrollLeft;
+        });
+
+        offeringTrack.addEventListener('mouseleave', () => isDown = false);
+        offeringTrack.addEventListener('mouseup', () => isDown = false);
+
+        offeringTrack.addEventListener('mousemove', (e) => {
+            if (!isDown) return;
+            e.preventDefault();
+            const x = e.pageX - offeringTrack.offsetLeft;
+            const walk = (x - startX) * 2;
+            offeringTrack.scrollLeft = scrollLeft - walk;
+        });
+
+        // Form Interaction
+        const form = document.querySelector('.gate-form');
+        const submitBtn = document.querySelector('.gate-submit');
+
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            submitBtn.textContent = 'PROCESSING...';
+            submitBtn.style.borderColor = 'var(--cyan)';
+            submitBtn.style.color = 'var(--cyan)';
+            
+            setTimeout(() => {
+                submitBtn.textContent = 'ACCESS GRANTED';
+                submitBtn.style.background = 'var(--acid)';
+                submitBtn.style.color = 'var(--void)';
+                submitBtn.style.borderColor = 'var(--acid)';
+            }, 1500);
+        });
+
+        // Keyboard Navigation
+        document.addEventListener('keydown', (e) => {
+            const current = Array.from(navLines).findIndex(line => line.classList.contains('active'));
+            
+            if (e.key === 'ArrowDown' && current < sections.length - 1) {
+                sections[current + 1].scrollIntoView({ behavior: 'smooth' });
+            } else if (e.key === 'ArrowUp' && current > 0) {
+                sections[current - 1].scrollIntoView({ behavior: 'smooth' });
+            }
+        });
+
+        // Temple Cell Interaction
+        document.querySelectorAll('.temple-cell').forEach(cell => {
+            cell.addEventListener('mouseenter', () => {
+                cell.style.transform = 'scale(1.1)';
+                cell.style.zIndex = '10';
+            });
+            
+            cell.addEventListener('mouseleave', () => {
+                cell.style.transform = 'scale(1)';
+                cell.style.zIndex = '1';
+            });
+        });
+    </script>
+</body>
+</html>
